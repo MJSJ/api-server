@@ -9,11 +9,11 @@ $ npm install
 $ npm start
 ````
 
-
+先装mysql，跑后面的sql语句
 
 只做了ajax的api接口，通过以下方式调用 
-`http:/localhost:3000/members`
-`http:/localhost:3000/members/100001`
+* `http:/localhost:3000/members`
+* `http:/localhost:3000/members/100001`
 
 ## File structure
 
@@ -35,11 +35,6 @@ $ npm start
 │   ├── team.js
 │   ├── team-member.js
 │   └── user.js
-├── public
-│   └── css
-│       ├── admin.css
-│       ├── base.css
-│       └── www.css
 ├─ app.js
 ├─ .env
 ├─ LICENSE
@@ -126,5 +121,6 @@ INSERT INTO User VALUES
   (100001,'Guest','User','guest@user.com','c2NyeXB0AA8AAAAIAAAAAadRWAxJ7PVQ8T6zW7orsuCiHr38TPYJ9TGVbHEK5hvdbC7lCKxKdebdo0T0wR9Aiye4GQDHbLkcBNVVQZpBDtWGfezCWZvtcw4JZ90HDuhb','guest'),
   (100002,'Admin','User','admin@user.com','c2NyeXB0AA4AAAAIAAAAAfvrpUA5jkh3ObPPUPNQEjbkHXk4vj4xPWH6N8yLEvbgkKqW5zqv3AgsHtTcSL2lzfviyMkXjybHPXeqDY62ZxHEvmTgEY6THddbqOUAOzTQ','admin');
 ```
+‘[原版：https://github.com/chrisveness/koa-sample-web-app-api-mysql)](https://github.com/chrisveness/koa-sample-web-app-api-mysql)’
 
 The full sample app is around 1,000 lines of JavaScript.
