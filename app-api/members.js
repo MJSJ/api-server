@@ -29,6 +29,7 @@ class MembersHandlers {
         try {
 
             let sql = 'Select * From Member';
+            console.log(sql)
             // query-string filters?
             if (ctx.querystring) {
                 const filter = Object.keys(ctx.query).map(function(q) { return q+' = :'+q; }).join(' and ');
