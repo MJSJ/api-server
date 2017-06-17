@@ -6,7 +6,7 @@
 
 const router = require('koa-router')(); // router middleware for koa
 const jwt    = require('jsonwebtoken'); // JSON Web Token implementation
-const scrypt = require('scrypt');       // scrypt library
+// const scrypt = require('scrypt');       // scrypt library
 
 const User   = require('../..//models/user.js');
 
@@ -34,7 +34,7 @@ router.get('/auth', async function getAuth(ctx) {
 
     // check password
     try {
-        const match = await scrypt.verifyKdf(Buffer.from(user.Password, 'base64'), ctx.query.password);
+        // const match = await scrypt.verifyKdf(Buffer.from(user.Password, 'base64'), ctx.query.password);
 
         if (!match) ctx.throw(404, 'Username/password not found');
 
