@@ -28,9 +28,9 @@ $ npm start
 ├── app-api
 │   ├── routes
 │       ├── routes-auth.js   #需要权限的接口，还没做完
-│       └── routes-members.js
+│       ├── routes-user.js   #可用于做登录，登录功能还没做
+│       └── routes-score.js
 │   ├── app-api.js
-│   ├── members.js
 │   ├── cast-boolean.js
 ├── lib
 │   └── lib.js
