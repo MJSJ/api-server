@@ -1,6 +1,6 @@
 module.exports = function(sequelize, DataTypes) {
   var Score = sequelize.define("score", {
-    num:DataTypes.TEXT
+    num:DataTypes.INTEGER
   },{
     timestamps: false
   });

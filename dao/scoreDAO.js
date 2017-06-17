@@ -12,7 +12,10 @@ class ScoreDAO {
             attributes: { exclude: ['id','userId'] },
             where: {
                 userId: id
-            }
+            },
+            order: [
+                ['num', 'DESC']
+            ]
         })
         return scores
     }
@@ -25,7 +28,6 @@ class ScoreDAO {
     static async getTop(num) {
         const scores =  await model.score.findAll({
             order: [
-                // Will escape username and validate DESC against a list of valid direction parameters
                 ['num', 'DESC']
             ],
             limit: num,

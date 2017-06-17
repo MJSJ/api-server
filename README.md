@@ -78,7 +78,7 @@ create table User (
 
 create table Score (
   id integer unsigned not null auto_increment,
-  num   text not null,
+  num   integer not null,
   userId integer unsigned not null,
   primary key (id),
   foreign key (userId) references User(userId)
@@ -103,7 +103,9 @@ INSERT INTO User VALUES
 INSERT INTO Score VALUES 
  (100001,'99',100001),
  (100002,'993',100001),
- (100003,'994',100001);
+ (100003,'994',100001),
+ (100004,'1993',100002);
+
 ```
 [原版：https://github.com/chrisveness/koa-sample-web-app-api-mysql)](https://github.com/chrisveness/koa-sample-web-app-api-mysql)
 
