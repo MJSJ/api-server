@@ -50,7 +50,7 @@ app.use(body());
 
 
 // set signed cookie keys for JWT cookie & session cookie
-app.keys = ['koa-sample-app'];
+app.keys = ['api-server'];
 
 // session for flash messages (uses signed session cookies, with no server storage)
 app.use(session(app)); // note koa-session@3.4.0 is v1 middleware which generates deprecation notice

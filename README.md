@@ -92,7 +92,7 @@ create table Score (
 ## Test data
 
 ```sql
--- Test data for ‘koa-sample-web-app-api-mysql’ app
+-- Test data for ‘api-server’ app
 
 INSERT INTO User VALUES 
  (100001,'Juan Manuel','Fangio','juan-manuel@fangio.com', false),
