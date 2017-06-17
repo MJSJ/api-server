@@ -17,23 +17,20 @@ const compress = require('koa-compress');   // HTTP compression
 const session  = require('koa-session');    // session for flash messages
 const mysql    = require('mysql2/promise'); // fast mysql driver
 const debug    = require('debug')('app');   // small debugging utility
+// const Sequelize = require("sequelize");
+// require('dotenv').config(); // loads environment variables from .env file (if available - eg dev env)
 
-require('dotenv').config(); // loads environment variables from .env file (if available - eg dev env)
+// const convert = require('koa-convert');
+// const json = require('koa-json');
+// const bodyparser = require('koa-bodyparser')();
+
 
 const app = new Koa();
+var models = require("./models");
 
-
-// MySQL connection pool (set up on app initialisation)
-const config = {
-    host:     process.env.DB_HOST,
-    port:     process.env.DB_PORT,
-    user:     process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_DATABASE,
-};
-global.connectionPool = mysql.createPool(config); // put in global to pass to sub-apps
-
-
+// app.use(require('koa-body-parser')());
+// app.use(convert(bodyparser));
+// app.use(convert(json()));
 /* set up middleware which will be applied to each request - - - - - - - - - - - - - - - - - - -  */
 
 
@@ -89,11 +86,16 @@ app.use(async function composeSubapp(ctx) { // note no 'next' after composed sub
 });
 
 
+// models.sequelize.sync().then(function () {
+//    app.listen(process.env.PORT||3000);
+// });
+
+
 /* create server - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
 
 
 app.listen(process.env.PORT||3000);
-console.info(`${process.version} listening on port ${process.env.PORT||3000} (${app.env}/${config.database})`);
+// console.info(`${process.version} listening on port ${process.env.PORT||3000} (${app.env}/${config.database})`);
 
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */

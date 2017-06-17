@@ -15,8 +15,7 @@ const Koa       = require('koa');          // Koa framework
 const jwt       = require('jsonwebtoken'); // JSON Web Token implementation
 const bunyan    = require('bunyan');       // logging
 const koaLogger = require('koa-bunyan');   // logging
-
-
+const cors = require('koa-cors');
 const app = new Koa(); // API app
 
 
@@ -27,7 +26,7 @@ app.use(async function contentNegotiation(ctx, next) {
     if (!ctx.body) return; // no content to return
     const type = ctx.accepts('json', 'text');
 });
-
+app.use(cors());
 
 // handle thrown or uncaught exceptions anywhere down the line
 app.use(async function handleErrors(ctx, next) {
@@ -66,14 +65,14 @@ app.use(async function mysqlConnection(ctx, next) {
     try {
 
         // keep copy of ctx.state.db in global for access from models
-        ctx.state.db = global.db = await global.connectionPool.getConnection();
-        ctx.state.db.connection.config.namedPlaceholders = true;
-        // traditional mode ensures not null is respected for unsupplied fields, ensures valid JavaScript dates, etc
-        await ctx.state.db.query('SET SESSION sql_mode = "TRADITIONAL"');
+        // ctx.state.db = global.db = await global.connectionPool.getConnection();
+        // ctx.state.db.connection.config.namedPlaceholders = true;
+        // // traditional mode ensures not null is respected for unsupplied fields, ensures valid JavaScript dates, etc
+        // await ctx.state.db.query('SET SESSION sql_mode = "TRADITIONAL"');
 
         await next();
 
-        ctx.state.db.release();
+        // ctx.state.db.release();
 
     } catch (e) {
         // note if getConnection() fails we have no this.state.db, but if anything downstream throws,
@@ -122,8 +121,8 @@ app.use(async function verifyJwt(ctx, next) {
 });
 
 app.use(require('./routes/routes-auth.js'));
-app.use(require('./routes/routes-members.js'));
-
+app.use(require('./routes/routes-users.js'));
+app.use(require('./routes/routes-score.js'));
 
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
