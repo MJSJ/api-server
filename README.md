@@ -16,10 +16,13 @@ $ npm start
 
 只做了ajax的api接口，通过以下方式调用 
 * `http:/localhost:3000/score?userId=100001`
+* `http:/localhost:3000/score/top`
 * `http:/localhost:3000/score` post，支持cors
 
+[ajax-fe：https://github.com/MJSJ/ajax-fe)](https://github.com/MJSJ/ajax-fe)
+
 ## invoke
-  app.js => app-api.js => routes-score.js => userService => userDAO
+  app.js => app-api.js => routes-score.js => scoreService => scoreDAO
 
 ## File structure
 
@@ -64,21 +67,21 @@ create database `api_server`;
 use `api_server`;
 
 create table User (
-  UserId  integer unsigned not null auto_increment,
-  Firstname text,
-  Lastname  text,
-  Email     text not null,
-  Active    bit(1),
-  primary key       (UserId),
+  id  integer unsigned not null auto_increment,
+  firstname text,
+  lastname  text,
+  email     text not null,
+  active    bit(1),
+  primary key       (id),
   unique  key Email (Email(24))
 ) engine=InnoDB charset=utf8 auto_increment=100001;
 
 create table Score (
-  Id integer unsigned not null auto_increment,
-  Num   text not null,
-  UserId integer unsigned not null,
-  primary key (Id),
-  foreign key (UserId) references User(UserId)
+  id integer unsigned not null auto_increment,
+  num   text not null,
+  userId integer unsigned not null,
+  primary key (id),
+  foreign key (userId) references User(userId)
 ) engine=InnoDB charset=utf8 auto_increment=100001;
 
 
@@ -102,6 +105,6 @@ INSERT INTO Score VALUES
  (100002,'993',100001),
  (100003,'994',100001);
 ```
-‘[原版：https://github.com/chrisveness/koa-sample-web-app-api-mysql)](https://github.com/chrisveness/koa-sample-web-app-api-mysql)’
+[原版：https://github.com/chrisveness/koa-sample-web-app-api-mysql)](https://github.com/chrisveness/koa-sample-web-app-api-mysql)
 
 The full sample app is around 1,000 lines of JavaScript.

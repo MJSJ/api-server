@@ -17,20 +17,11 @@ const compress = require('koa-compress');   // HTTP compression
 const session  = require('koa-session');    // session for flash messages
 const mysql    = require('mysql2/promise'); // fast mysql driver
 const debug    = require('debug')('app');   // small debugging utility
-// const Sequelize = require("sequelize");
 // require('dotenv').config(); // loads environment variables from .env file (if available - eg dev env)
 
-// const convert = require('koa-convert');
-// const json = require('koa-json');
-// const bodyparser = require('koa-bodyparser')();
 
 
 const app = new Koa();
-var models = require("./models");
-
-// app.use(require('koa-body-parser')());
-// app.use(convert(bodyparser));
-// app.use(convert(json()));
 /* set up middleware which will be applied to each request - - - - - - - - - - - - - - - - - - -  */
 
 
@@ -85,10 +76,6 @@ app.use(async function composeSubapp(ctx) { // note no 'next' after composed sub
     await compose(require('./app-api/app-api.js').middleware)(ctx);
 });
 
-
-// models.sequelize.sync().then(function () {
-//    app.listen(process.env.PORT||3000);
-// });
 
 
 /* create server - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */

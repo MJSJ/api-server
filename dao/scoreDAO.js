@@ -4,14 +4,14 @@
 const Lib        = require('../lib/lib.js');
 const ModelError = require('../models/modelerror.js');
 const model  = require('../models/index.js');
-const Sequelize = require("sequelize");
+const sequelize = model.sequelize;
 
 class ScoreDAO {
     static async getScoresByUserId(id) {
         const scores = await model.score.findAll({
-            attributes: { exclude: ['id'] },
+            attributes: { exclude: ['id','userId'] },
             where: {
-                id: id
+                userId: id
             }
         })
         return scores
@@ -29,7 +29,12 @@ class ScoreDAO {
                 ['num', 'DESC']
             ],
             limit: num,
-            include: [model.user]
+            include: [{
+                model:model.user,
+                // through: {attributes: []},
+                attributes:['firstname']
+            }],
+            attributes: ['num']
         })
         return scores;
     }
@@ -40,9 +45,9 @@ class ScoreDAO {
                 num:num,
                 userId:userId
             }) 
-            return "保存成功"
+            return true
         } catch (error) {
-            return "保存失败"
+            return false
         }
     }
 }

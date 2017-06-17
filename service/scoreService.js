@@ -23,16 +23,21 @@ class ScoreService {
         const defaultNum = 10;
         const result = await ScoreDAO.getTop(num||defaultNum);
         if (!result) ctx.throw(404, `No scores found`); // Not Found
+
+        // const finalResult = {
+        //     firstname:result.user.firstname,
+        //     score:result.score
+        // }
         ctx.body = result;
     }
     static async postScore(ctx){
         const {userId,num} = ctx.request.body
         const result = await ScoreDAO.saveScore(userId,num)
+
         ctx.body = {
             "code":200,
-            resp:result
+            resp:result?"保存成功":"保存失败"
         }
-        
     }
 }
 
