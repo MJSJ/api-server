@@ -81,7 +81,7 @@ app.use(async function composeSubapp(ctx) { // note no 'next' after composed sub
 /* create server - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
 
 
-app.listen(process.env.PORT||3000);
+app.listen(process.env.PORT||8081);
 // console.info(`${process.version} listening on port ${process.env.PORT||3000} (${app.env}/${config.database})`);
 
 
