@@ -17,6 +17,7 @@ $ npm start
 只做了ajax的api接口，通过以下方式调用 
 所有详细接口在前端页面可查看
 * `http://localhost:3000/login`
+* `http://localhost:3000/score/top`
 * `http:/localhost:3000/score`
 * `http:/localhost:3000/score/top`
 * `http://localhost:3000/latestScore`
