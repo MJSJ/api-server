@@ -19,6 +19,7 @@ $ npm start
 * `http:/localhost:3000/score/top`
 * `http:/localhost:3000/score` post，支持cors
 
+## 配合前端页面调用
 [ajax-fe：https://github.com/MJSJ/ajax-fe)](https://github.com/MJSJ/ajax-fe)
 
 ## invoke
@@ -72,8 +73,9 @@ create table User (
   lastname  text,
   email     text not null,
   active    bit(1),
+  password  text,
   primary key       (id),
-  unique  key Email (Email(24))
+  unique  key email (email(24))
 ) engine=InnoDB charset=utf8 auto_increment=100001;
 
 create table Score (
@@ -95,10 +97,10 @@ create table Score (
 -- Test data for ‘api-server’ app
 
 INSERT INTO User VALUES 
- (100001,'Juan Manuel','Fangio','juan-manuel@fangio.com', false),
- (100002,'Ayrton','Senna','ayrton@senna.com', false),
- (100003,'Michael','Schumacher','michael@schumacher.com', false),
- (100004,'Lewis','Hamilton','lewis@hamilton.com', true);
+ (100001,'Juan Manuel','Fangio','juan-manuel@fangio.com', false,'aaa'),
+ (100002,'Ayrton','Senna','ayrton@senna.com', false,'bbb'),
+ (100003,'Michael','Schumacher','michael@schumacher.com', false,'ccc'),
+ (100004,'Lewis','Hamilton','lewis@hamilton.com', true,'ddd');
 
 INSERT INTO Score VALUES 
  (100001,'99',100001),

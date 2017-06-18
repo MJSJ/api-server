@@ -9,7 +9,7 @@ class UserDAO {
     static async getById(id) {
         const users = await model.user.findAll({
             where: {
-                UserId: id
+                id: id
             }
         })
 
@@ -25,22 +25,38 @@ class UserDAO {
 
     static async getBy(field, value) {
         try {
-            model.User.findAll({
+            const users = await model.user.findAll({
                 where: {
-                    [field]: field
+                    [field]: value
                 },
                 order:[
                     ['firstname', 'DESC'],
                     ['lastname', 'DESC']
                 ]
-            }).then(function(users) {
-                return users;
-            });
+            })
 
+            return users;
         } catch (e) {
             switch (e.code) {
                 case 'ER_BAD_FIELD_ERROR': throw new ModelError(403, 'Unrecognised User field '+field);
                 default: Lib.logException('model.User.getBy', e); throw new ModelError(500, e.message);
+            }
+        }
+    }
+
+    static async getByEmail(value) {
+        try {
+            const users = await model.user.findAll({
+                where: {
+                    email: value
+                }
+            })
+            return users;
+
+        } catch (e) {
+            switch (e.code) {
+                case 'ER_BAD_FIELD_ERROR': throw new ModelError(403, 'Unrecognised User field '+field);
+                default: Lib.logException('model.user.getBy', e); throw new ModelError(500, e.message);
             }
         }
     }

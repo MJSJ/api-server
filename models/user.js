@@ -12,7 +12,8 @@ module.exports = function(sequelize, DataTypes) {
         allowNull: false,
         unique:true
     },
-    active:DataTypes.TEXT
+    active:DataTypes.TEXT,
+    password:DataTypes.TEXT
   },{
     timestamps: false
   });

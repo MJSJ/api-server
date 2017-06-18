@@ -26,7 +26,10 @@ app.use(async function contentNegotiation(ctx, next) {
     if (!ctx.body) return; // no content to return
     const type = ctx.accepts('json', 'text');
 });
-app.use(cors());
+
+app.use(cors({
+    "credentials":true
+}));
 
 // handle thrown or uncaught exceptions anywhere down the line
 app.use(async function handleErrors(ctx, next) {
