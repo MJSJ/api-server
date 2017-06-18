@@ -15,8 +15,11 @@ $ npm start
 先装mysql，跑后面的sql语句
 
 只做了ajax的api接口，通过以下方式调用 
-* `http:/localhost:3000/score?userId=100001`
+所有详细接口在前端页面可查看
+* `http://localhost:3000/login`
+* `http:/localhost:3000/score`
 * `http:/localhost:3000/score/top`
+* `http://localhost:3000/latestScore`
 * `http:/localhost:3000/score` post，支持cors
 
 ## 配合前端页面调用
@@ -82,6 +85,8 @@ create table Score (
   id integer unsigned not null auto_increment,
   num   integer not null,
   userId integer unsigned not null,
+  cretedAt DATETIME NOT NULL,
+  updateAt DATETIME NOT NULL,
   primary key (id),
   foreign key (userId) references User(userId)
 ) engine=InnoDB charset=utf8 auto_increment=100001;
@@ -103,10 +108,11 @@ INSERT INTO User VALUES
  (100004,'Lewis','Hamilton','lewis@hamilton.com', true,'ddd');
 
 INSERT INTO Score VALUES 
- (100001,'99',100001),
- (100002,'993',100001),
- (100003,'994',100001),
- (100004,'1993',100002);
+ (100001,'99','2017-06-18 11:23:49','2017-06-18 11:23:49',100001),
+ (100002,'993','2017-06-18 11:23:49','2017-06-18 11:23:49',100001),
+ (100003,'994','2017-06-18 11:23:49','2017-06-18 11:23:49',100001),
+ (100004,'1993','2017-06-18 11:23:49','2017-06-18 11:23:49',100002);
+ (100005,'193','2017-06-18 11:23:49','2017-06-17 11:23:49',100001);
 
 ```
 [原版：https://github.com/chrisveness/koa-sample-web-app-api-mysql)](https://github.com/chrisveness/koa-sample-web-app-api-mysql)

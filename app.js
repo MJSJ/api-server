@@ -1,11 +1,3 @@
-/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
-/* Simple app to explore Node.js + Koa + MySQL basics for CRUD admin + API                        */
-/*                                                                                                */
-/* App comprises three (composed) sub-apps:                                                       */
-/*  - www.   (public website pages)                                                               */
-/*  - admin. (pages for interactively managing data)                                              */
-/*  - api.   (RESTful CRUD API)                                                                   */
-/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
 
 'use strict';
 /* eslint no-shadow:off *//* app is already declared in the upper scope */
@@ -14,16 +6,31 @@ const Koa      = require('koa');            // Koa framework
 const body     = require('koa-body');       // body parser
 const compose  = require('koa-compose');    // middleware composer
 const compress = require('koa-compress');   // HTTP compression
-const session  = require('koa-session');    // session for flash messages
 const mysql    = require('mysql2/promise'); // fast mysql driver
 const debug    = require('debug')('app');   // small debugging utility
+// const csrf     = require('koa-csrf')
 // require('dotenv').config(); // loads environment variables from .env file (if available - eg dev env)
 
 
+const env       = "production";
+const path      = require("path");
+const session = require('koa-generic-session');
+const MysqlStore = require('koa-mysql-session')
+const config    = require(path.join(__dirname, '.', 'config', 'config.json'))[env];
 
 const app = new Koa();
 /* set up middleware which will be applied to each request - - - - - - - - - - - - - - - - - - -  */
 
+// CSRF 有bug
+
+// app.use(new csrf({
+//   invalidSessionSecretMessage: 'Invalid session secret',
+//   invalidSessionSecretStatusCode: 403,
+//   invalidTokenMessage: 'Invalid CSRF token',
+//   invalidTokenStatusCode: 403,
+//   excludedMethods: [ 'GET', 'HEAD', 'OPTIONS' ],
+//   disableQuery: false
+// }))
 
 // return response time in X-Response-Time header
 app.use(async function responseTime(ctx, next) {
@@ -49,12 +56,23 @@ app.use(async function robots(ctx, next) {
 app.use(body());
 
 
-// set signed cookie keys for JWT cookie & session cookie
-app.keys = ['api-server'];
-
-// session for flash messages (uses signed session cookies, with no server storage)
-app.use(session(app)); // note koa-session@3.4.0 is v1 middleware which generates deprecation notice
-
+// session
+const APP_NAME = 'mjsj';
+const THIRTY_MINTUES = 30 * 60 * 1000;
+app.keys = [APP_NAME]
+app.use(session({
+    store:new MysqlStore({
+        user: config.username,
+        password: config.password,
+        database: config.database,
+        host: config.host
+    }),
+    key:APP_NAME+'.sid',
+    rolling: true,
+    cookie: {
+        maxage:THIRTY_MINTUES
+    }
+}))
 
 // sometimes useful to be able to track each request...
 app.use(async function(ctx, next) {

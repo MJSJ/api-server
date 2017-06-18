@@ -8,7 +8,6 @@ const castBoolean  = require('./cast-boolean.js');
 const UserDAO = require('../dao/userDAO.js');
 const ScoreDAO = require('../dao/scoreDAO.js');
 const jwt    = require('jsonwebtoken');
-const COOKIE_NAME = 'mjsj:jwt'
 
 class UserService {
 
@@ -35,7 +34,7 @@ class UserService {
     }
 
     static async postLogin(ctx) {
-        if(ctx.cookies.get(COOKIE_NAME)){
+        if(ctx.session.loginUser){
             ctx.body = {
                 code:"200",
                 data:{
@@ -56,8 +55,8 @@ class UserService {
             }
             return 
         }
-        // let [user] = await UserDAO.getBy('email', username); // lookup user
-        let [user] = await UserDAO.getByEmail( username); // lookup user
+        let [user] = await UserDAO.getBy('email', username); // lookup user
+        // let [user] = await UserDAO.getByEmail( username); // lookup user
 
         if (user) { // verify password matches
             try {
@@ -88,7 +87,7 @@ class UserService {
             };
             if (ctx.request.body['remember-me']) options.expires = new Date(Date.now() + 1000*60*60*24*7);
 
-            ctx.cookies.set(COOKIE_NAME, token, options);
+            ctx.session.loginUser = user;
             // if we were provided with a redirect URL after the /login, redirect there, otherwise /
             // ctx.redirect(ctx.url=='/login' ? '/' : ctx.url.replace('/login', ''));
             ctx.body = {
@@ -116,7 +115,7 @@ class UserService {
      * GET /logout - logout user
      */
     static async getLogout(ctx) {
-        ctx.cookies.set(COOKIE_NAME,null , {signed: true,expires:new Date(1900,0,1)}); // delete the cookie holding the JSON Web Token
+        ctx.session.loginUser = null;
         ctx.body={
             code:"200",
             data:{
@@ -126,8 +125,7 @@ class UserService {
     }
 
     static async doSomething(ctx){
-        let s = ctx.cookies.get(COOKIE_NAME)
-        if(ctx.cookies.get(COOKIE_NAME)){
+        if(ctx.session.loginUser){
             ctx.body = {
                 code:"200",
                 data:{

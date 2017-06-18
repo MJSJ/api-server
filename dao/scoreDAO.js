@@ -41,6 +41,24 @@ class ScoreDAO {
         return scores;
     }
 
+    static async getLatest(id,num) {
+        const scores =  await model.score.findAll({
+            order: [
+                ['createdAt', 'DESC']
+            ],
+            limit: num,
+            where:{
+                userId:id
+            },
+            include: [{
+                model:model.user,
+                attributes:['firstname']
+            }],
+            attributes: ['num','createdAt']
+        })
+        return scores;
+    }
+
     static async saveScore(userId,num){
         try {
             await model.score.create({

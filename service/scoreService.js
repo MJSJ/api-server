@@ -12,36 +12,81 @@ const ScoreDAO = require('../dao/scoreDAO.js');
 class ScoreService {
 
     static async getScoresByUser(ctx){
-        const userId = ctx.query.userId;
-        if(!userId) ctx.throw(404, `args not valid`); 
-        const result = await ScoreDAO.getScoresByUserId(userId);
-        if (!result) ctx.throw(404, `No scores ${userId} found`); // Not Found
+        // const userId = ctx.query.userId;
+        // if(!userId) ctx.throw(404, `args not valid`);
+        const loginUser =  ctx.session.loginUser
+        if(!loginUser){
+            ctx.body = {
+                code:"404",
+                data:{
+                    success:false,
+                    msg:'not login'
+                }
+            }
+            return;
+        }
+        const result = await ScoreDAO.getScoresByUserId(loginUser.id);
         let finalResult = result.map((item)=>{
-            return item.num
-        });
-        ctx.body = finalResult;
+            return {
+                num:item.num,
+                time:item.createdAt
+            }
+        })||[];
+        ctx.body = {
+            code:"200",
+            data:finalResult
+        }
     }
 
     static async getTop(ctx){
-        const num = ctx.query.num;
+        const num = parseInt(ctx.query.num);
         const defaultNum = 10;
         const result = await ScoreDAO.getTop(num||defaultNum);
-        if (!result) ctx.throw(404, `No scores found`); // Not Found
         let finalResult = result.map((item)=>{
             return{
                 name:item.user.firstname,
                 num:item.num
             }
-        })
-        ctx.body = finalResult;
+        })||[];
+        ctx.body = {
+            code:"200",
+            data:finalResult
+        }
     }
+
+    static async getLatestScore(ctx){
+        const loginUser =  ctx.session.loginUser
+        if(!loginUser){
+            ctx.body = {
+                code:"404",
+                data:{
+                    success:false,
+                    msg:'not login'
+                }
+            }
+            return;
+        }
+        const latestNum = parseInt(ctx.query.num) || 1;
+        const result = await ScoreDAO.getLatest(loginUser.id,latestNum);
+        let finalResult = result.map((item)=>{
+            return{
+                num:item.num,
+                time:item.createdAt
+            }
+        })||[];
+        ctx.body = {
+            code:"200",
+            data:finalResult
+        }
+    }
+
     static async postScore(ctx){
         const {userId,num} = ctx.request.body
         const result = await ScoreDAO.saveScore(userId,num)
 
         ctx.body = {
             "code":200,
-            resp:result?"保存成功":"保存失败"
+             data:result?"保存成功":"保存失败"
         }
     }
 }
