@@ -7,8 +7,12 @@
 class WxService {
 
     static async authWxLogin(ctx) {
-        ctx.cookies.set('c', 'tobi');
-        ctx.body = '';
+        let c = ctx.cookies.set('c');
+        let path = ctx.query.state;
+        let authUser = null;
+        if(c){
+            
+        }
     }
 
 }
