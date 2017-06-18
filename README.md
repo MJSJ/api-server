@@ -73,7 +73,7 @@ create table User (
   lastname  text,
   email     text not null,
   active    bit(1),
-  password  text,
+  password  text not null,
   primary key       (id),
   unique  key email (email(24))
 ) engine=InnoDB charset=utf8 auto_increment=100001;

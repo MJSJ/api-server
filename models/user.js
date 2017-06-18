@@ -13,7 +13,10 @@ module.exports = function(sequelize, DataTypes) {
         unique:true
     },
     active:DataTypes.TEXT,
-    password:DataTypes.TEXT
+    password:{
+      allowNull: false,
+      type:DataTypes.TEXT
+    }
   },{
     timestamps: false
   });
