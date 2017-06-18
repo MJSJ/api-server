@@ -6,7 +6,7 @@
 
 const router = require('koa-router')(); // router middleware for koa
 
-const wxSerice = require('../../service/WxService.js');
+const wxSerice = require('../../service/wxService.js');
 
 router.get('/auth/MP_verify_oai1jPbiuXyaD710.txt', async function (ctx) {
     ctx.body = 'oai1jPbiuXyaD710';
