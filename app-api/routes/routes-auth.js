@@ -27,27 +27,27 @@ const User   = require('../..//models/user.js');
  * @apiHeader  [Accept=application/json] application/json, application/xml, text/yaml, text/plain.
  * @apiSuccess jwt                       JSON Web Token be used for subsequent Authorization header
  */
-router.get('/auth', async function getAuth(ctx) {
-    const [user] = await User.getBy('Email', ctx.query.username);
+// router.get('/auth', async function getAuth(ctx) {
+//     const [user] = await User.getBy('Email', ctx.query.username);
 
-    if (!user) ctx.throw(404, 'Username/password not found');
+//     if (!user) ctx.throw(404, 'Username/password not found');
 
-    // check password
-    try {
-        // const match = await scrypt.verifyKdf(Buffer.from(user.Password, 'base64'), ctx.query.password);
+//     // check password
+//     try {
+//         // const match = await scrypt.verifyKdf(Buffer.from(user.Password, 'base64'), ctx.query.password);
 
-        if (!match) ctx.throw(404, 'Username/password not found');
+//         if (!match) ctx.throw(404, 'Username/password not found');
 
-        const payload = {
-            id:   user.UserId,                         // to get user details
-            role: user.Role.slice(0, 1).toLowerCase(), // make role available without db query
-        };
-        const token = jwt.sign(payload, 'koa-sample-app-signature-key', { expiresIn: '24h' });
-        ctx.body = { jwt: token, root: 'Auth' };
-    } catch (e) { // e.g. "data is not a valid scrypt-encrypted block"
-        ctx.throw(404, 'Username/password not found');
-    }
-});
+//         const payload = {
+//             id:   user.UserId,                         // to get user details
+//             role: user.Role.slice(0, 1).toLowerCase(), // make role available without db query
+//         };
+//         const token = jwt.sign(payload, 'koa-sample-app-signature-key', { expiresIn: '24h' });
+//         ctx.body = { jwt: token, root: 'Auth' };
+//     } catch (e) { // e.g. "data is not a valid scrypt-encrypted block"
+//         ctx.throw(404, 'Username/password not found');
+//     }
+// });
 
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */

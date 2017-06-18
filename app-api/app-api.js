@@ -97,33 +97,33 @@ app.use(koaLogger(logger, {}));
 
 // remaining routes require JWT auth (obtained from /auth and supplied in bearer authorization header)
 //auth路径下的需要授权
-app.use(async function verifyJwt(ctx, next) {
-    if(ctx.originalUrl.indexOf("auth")>-1){
-        if (!ctx.header.authorization) ctx.throw(401, 'Authorisation required');
-        const [ scheme, token ] = ctx.header.authorization.split(' ');
-        if (scheme != 'Bearer') ctx.throw(401, 'Invalid authorisation');
+// app.use(async function verifyJwt(ctx, next) {
+//     if(ctx.originalUrl.indexOf("auth")>-1){
+//         if (!ctx.header.authorization) ctx.throw(401, 'Authorisation required');
+//         const [ scheme, token ] = ctx.header.authorization.split(' ');
+//         if (scheme != 'Bearer') ctx.throw(401, 'Invalid authorisation');
 
-        const roles = { g: 'guest', a: 'admin', s: 'su' };
+//         const roles = { g: 'guest', a: 'admin', s: 'su' };
 
-        try {
-            const payload = jwt.verify(token, 'koa-sample-app-signature-key'); // throws on invalid token
+//         try {
+//             const payload = jwt.verify(token, 'koa-sample-app-signature-key'); // throws on invalid token
 
-            // valid token: accept it...
-            ctx.state.user = payload;                  // for user id  to look up user details
-            ctx.state.user.Role = roles[payload.role]; // for authorisation checks
-        } catch (e) {
-            if (e.message == 'invalid token') ctx.throw(401, 'Invalid JWT'); // Unauthorized
-            ctx.throw(e.status||500, e.message); // Internal Server Error
-        }
-    } 
+//             // valid token: accept it...
+//             ctx.state.user = payload;                  // for user id  to look up user details
+//             ctx.state.user.Role = roles[payload.role]; // for authorisation checks
+//         } catch (e) {
+//             if (e.message == 'invalid token') ctx.throw(401, 'Invalid JWT'); // Unauthorized
+//             ctx.throw(e.status||500, e.message); // Internal Server Error
+//         }
+//     } 
 
-    await next();
-});
+//     await next();
+// });
 
 app.use(require('./routes/routes-auth.js'));
 app.use(require('./routes/routes-users.js'));
 app.use(require('./routes/routes-score.js'));
-
+app.use(require('./routes/routes-wx.js'));
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
 
