@@ -1,10 +1,5 @@
-/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
-/*  API handlers - Users                                                                        */
-/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
-
 'use strict';
 
-// const User       = require('../models/user.js');
 const castBoolean  = require('./cast-boolean.js');
 const UserDAO = require('../dao/userDAO.js');
 const ScoreDAO = require('../dao/scoreDAO.js');
