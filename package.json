@@ -22,6 +22,7 @@
     "node": "^7.6.0"
   },
   "dependencies": {
+    "axios": "^0.16.2",
     "bunyan": "^1.8.5",
     "child-process-promise": "^2.2.0",
     "debug": "^2.6.1",
