@@ -1,8 +1,8 @@
 {
   "development": {
     "username": "root",
-    "password": "fly",
-    "database": "api-server",
+    "password": "root",
+    "database": "api_server",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
@@ -15,8 +15,8 @@
   },
   "production": {
     "username": "root",
-    "password": "aasd",
-    "database": "api-server",
+    "password": "root",
+    "database": "api_server",
     "host": "127.0.0.1",
     "dialect": "mysql",
     "pool": {
