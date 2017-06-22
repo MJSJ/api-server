@@ -67,7 +67,7 @@ class WxService {
                                         return user;
                                     });
                 ctx.cookies.set('c', client.openid, {
-                    expires: new Date().getTime() + EXPIRES*24*60*60*1000
+                    expires: new Date(new Date().getTime() + EXPIRES*24*60*60*1000)
                 });
                 ctx.body = client;
             } else {
