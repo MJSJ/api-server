@@ -60,7 +60,7 @@ class WxService {
             let data = await WxService.get_access_token(code);
             let user = await WxService.get_wx_user(data);
             if(user !== null){
-                console.info(user);
+                delete user.privilege;
                 let client = await model.client
                                     .findOrCreate({where: {openid: user.openid}, defaults: user})
                                     .spread((client, created) => {
