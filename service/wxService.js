@@ -76,7 +76,12 @@ class WxService {
         } else {
             // 授权过的用户
             let client = await model.client.findOne({where: {openid: c}}).then(client => client);
-            ctx.body = client;
+            if(client === null){
+                ctx.cookies.set('c', null);
+                ctx.throw(500, '授权失败!');
+            }else {
+                ctx.body = client;
+            }
         }
     }
 }
