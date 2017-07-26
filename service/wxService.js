@@ -85,7 +85,7 @@ class WxService {
     }
 
     static async wxShare(ctx) {
-        ctx.body = fs.readFileSync('./views/wx/index1.html', 'utf-8');
+        ctx.body = fs.readFileSync('./view/wx/index1.html', 'utf-8');
     }
 }
 
