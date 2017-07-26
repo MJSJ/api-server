@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>SHARE</title>
+</head>
+<body>
+<script>
+// 分享
+(function(win){
+    var  imgUrl = "http://i3.itc.cn/20160718/3707_0fc861c7_f0f5_301b_1179_c34747820e31_1.jpg";
+    var link = win.href;
+    win.title = "特朗普“72变”：我真的很有钱！";
+    win.content = "中国的“粉丝”？普京的“闺蜜”？新任美国总统到底何方神圣？";
+    appid = '';
+    gSound = '';
+    function shareFriend() {
+        WeixinJSBridge.invoke("sendAppMessage", {
+            appid: appid,
+            img_url: imgUrl,
+            img_width: "200",
+            img_height: "200",
+            link: link,
+            desc: win.content,
+            title: win.title
+        }, function(b) {});
+    }
+
+    function shareTimeline() {
+        WeixinJSBridge.invoke("shareTimeline", {
+            appid: appid,
+            img_url: imgUrl,
+            img_width: "200",
+            img_height: "200",
+            link: link,
+            desc: win.content,
+            title: win.title
+        }, function(b) {});
+    }
+
+    function shareWeibo() {
+        WeixinJSBridge.invoke("shareWeibo", {
+            content: content,
+            url: link
+        }, function(b) {});
+    }
+    document.addEventListener("WeixinJSBridgeReady", function onBridgeReady() {
+        WeixinJSBridge.on("menu:share:appmessage", function(b) {
+            shareFriend();
+        });
+        WeixinJSBridge.on("menu:share:timeline", function(b) {
+            shareTimeline();
+        });
+        WeixinJSBridge.on("menu:share:weibo", function(b) {
+            shareWeibo();
+        });
+    }, false);
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "http://hm.baidu.com/hm.js?c154d502f02b12a996c34a02281a3bff";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+})(window);
+</script>
+</body>
+</html>

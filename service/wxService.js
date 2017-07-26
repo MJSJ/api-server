@@ -2,9 +2,6 @@
 /*  API handlers - Wx                                                                        */
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
 'use strict';
-
-const axios = require('axios');
-
 const APPID = 'wxd0124a9e51032874';
 const SECRET = 'a64c71252df6a6611e893c2ba53adf35';
 const TOKEN_URL = 'https://api.weixin.qq.com/sns/oauth2/access_token';
@@ -13,7 +10,9 @@ const GRANT_TYPE = 'authorization_code';
 const AUTH_URL = 'https://api.weixin.qq.com/sns/userinfo';
 const EXPIRES = 2;
 
+const axios = require('axios');
 const model = require('../models');
+const fs = require('fs');
 
 class WxService {
 
@@ -83,6 +82,10 @@ class WxService {
                 ctx.body = client;
             }
         }
+    }
+
+    static async wxShare(ctx) {
+        ctx.body = fs.readFileSync('./views/wx/index1.html', 'utf-8');
     }
 }
 
