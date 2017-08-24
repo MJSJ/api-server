@@ -31,6 +31,29 @@ app.use(cors({
     "credentials":true
 }));
 
+// csrf
+app.use(async function checkCsrf(ctx, next) {
+    if (ctx.path !== '/api/setToken'){
+        // console.log(ctx.session);
+        console.log(ctx.session)
+    }
+    await next();
+    // if (ctx.path === '/api/setToken' || ctx.method === 'GET') {
+    //     await next();
+    //     return;
+    // }
+    // const csrf = ctx.request.body.csrf || '';
+    // this.session.csrf = this.session.csrf || '';
+    // if(this.session.csrf !== csrf){
+    //     console.log('session:'+this.session.csrf);
+    //     console.log('post:'+csrf);
+    //     ctx.body = 'Invalid CSRF token';
+    // } else {
+    //     await next();
+    //     return;
+    // }
+});
+
 // handle thrown or uncaught exceptions anywhere down the line
 app.use(async function handleErrors(ctx, next) {
     try {
@@ -127,6 +150,7 @@ app.use(require('./routes/routes-auth.js'));
 app.use(require('./routes/routes-users.js'));
 app.use(require('./routes/routes-score.js'));
 app.use(require('./routes/routes-wx.js'));
+app.use(require('./routes/routes-csrf.js'));
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
 

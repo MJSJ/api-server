@@ -6,12 +6,10 @@
 
 const router = require('koa-router')(); // router middleware for koa
 
-const wxSerice = require('../../service/wxService.js');
+const CsrfService = require('../../service/CsrfService.js');
 
-router.get('/auth/MP_verify_oai1jPbiuXyaD710.txt', async function (ctx) {
-    ctx.body = 'oai1jPbiuXyaD710';
-});
+router.get('/api/setToken', CsrfService.setToken);
 
-router.get('/wx/auth/activity', wxSerice.authWxLogin);
+router.post('/api/test', CsrfService.test);
 
 module.exports = router.middleware();

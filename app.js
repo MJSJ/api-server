@@ -72,7 +72,7 @@ app.use(session({
     cookie: {
         maxage:THIRTY_MINTUES
     }
-}))
+}));
 
 // sometimes useful to be able to track each request...
 app.use(async function(ctx, next) {

@@ -15,7 +15,6 @@ const model = require('../models');
 const fs = require('fs');
 
 class WxService {
-
     static async get_access_token (c) {
         let url = TOKEN_URL + '?' 
                     + 'appid=' + APPID 
@@ -82,10 +81,6 @@ class WxService {
                 ctx.body = client;
             }
         }
-    }
-
-    static async wxShare(ctx) {
-        ctx.body = fs.readFileSync('./view/wx/index1.html', 'utf-8');
     }
 }
 
