@@ -6,7 +6,7 @@
 
 const router = require('koa-router')(); // router middleware for koa
 
-const CsrfService = require('../../service/CsrfService.js');
+const CsrfService = require('../../service/csrfService.js');
 
 router.get('/api/setToken', CsrfService.setToken);
 
