@@ -6,7 +6,7 @@ Then at the Unix command line, or using Git Bash on Windows:
 $ git clone https://github.com/MJSJ/api-server.git
 $ cd api-server
 $ npm install
-$ mysql>  create database api_server
+$ mysql>  CREATE DATABASE `api_server` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 $ npm run db
 $ mysql> insert表
 $ npm start
@@ -16,12 +16,12 @@ $ npm start
 
 只做了ajax的api接口，通过以下方式调用 
 所有详细接口在前端页面可查看
-* `http://localhost:3000/login`
-* `http://localhost:3000/score/top`
-* `http:/localhost:3000/score`
-* `http:/localhost:3000/score/top`
-* `http://localhost:3000/latestScore`
-* `http:/localhost:3000/score` post，支持cors
+* `http://localhost:8081/login`
+* `http://localhost:8081/score/top`
+* `http:/localhost:8081/score`
+* `http:/localhost:8081/score/top`
+* `http://localhost:8081/latestScore`
+* `http:/localhost:8081/score` post，支持cors
 
 ## 配合前端页面调用
 [ajax-fe：https://github.com/MJSJ/ajax-fe)](https://github.com/MJSJ/ajax-fe)
@@ -73,10 +73,9 @@ use `api_server`;
 
 create table User (
   id  integer unsigned not null auto_increment,
-  firstname text,
-  lastname  text,
+  name  text,
   email     text not null,
-  active    bit(1),
+  role    integer,
   password  text not null,
   primary key       (id),
   unique  key email (email(24))
@@ -103,17 +102,32 @@ create table Score (
 -- Test data for ‘api-server’ app
 
 INSERT INTO User VALUES 
- (100001,'Juan Manuel','Fangio','juan-manuel@fangio.com', false,'aaa'),
- (100002,'Ayrton','Senna','ayrton@senna.com', false,'bbb'),
- (100003,'Michael','Schumacher','michael@schumacher.com', false,'ccc'),
- (100004,'Lewis','Hamilton','lewis@hamilton.com', true,'ddd');
+ (100001,'旷宇','yursile@hamilton.com', 2,'ddd'),
+ (100002,'Ayrton','ayrton@senna.com', 1,'bbb'),
+ (100003,'Michael','michael@schumacher.com', 2,'ccc'),
+ (100004,'Lewis','lewis@hamilton.com', 2,'ddd'),
+ (100005,'Juan Manuel','juan-manuel@fangio.com', 1,'aaa');
+
+ 
 
 INSERT INTO Score VALUES 
  (100001,'99','2017-06-18 11:23:49','2017-06-18 11:23:49',100001),
  (100002,'993','2017-06-18 11:23:49','2017-06-18 11:23:49',100001),
  (100003,'994','2017-06-18 11:23:49','2017-06-18 11:23:49',100001),
- (100004,'1993','2017-06-18 11:23:49','2017-06-18 11:23:49',100002);
+ (100004,'1993','2017-06-18 11:23:49','2017-06-18 11:23:49',100002),
  (100005,'193','2017-06-18 11:23:49','2017-06-17 11:23:49',100001);
+
+
+ INSERT INTO Subject VALUES 
+ (100001,'什么专题','2017-06-18 11:23:49',100001),
+ (100002,'J8专题','2017-06-18 11:23:49',100001),
+ (100003,'Y2专题','2017-06-18 11:23:49',100002);
+
+
+ INSERT INTO History VALUES 
+ (100001,'v1','./static/a.html','2017-06-18 11:23:49',100001,100001),
+ (100002,'v22','./static/a2.html','2017-07-18 11:23:59',100001,100002), 
+ (100003,'什么版本','./static/bb.html','2017-07-18 11:23:59',100002,100003);
 
 ```
 [原版：https://github.com/chrisveness/koa-sample-web-app-api-mysql)](https://github.com/chrisveness/koa-sample-web-app-api-mysql)

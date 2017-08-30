@@ -39,7 +39,7 @@ class ScoreService {
         const result = await ScoreDAO.getTop(num||defaultNum);
         let finalResult = result.map((item)=>{
             return{
-                name:item.user.firstname,
+                name:item.user.name,
                 num:item.num
             }
         })||[];

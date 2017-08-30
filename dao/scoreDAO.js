@@ -34,7 +34,7 @@ class ScoreDAO {
             include: [{
                 model:model.user,
                 // through: {attributes: []},
-                attributes:['firstname']
+                attributes:['name']
             }],
             attributes: ['num']
         })
@@ -52,7 +52,7 @@ class ScoreDAO {
             },
             include: [{
                 model:model.user,
-                attributes:['firstname']
+                attributes:['name']
             }],
             attributes: ['num','createdAt']
         })

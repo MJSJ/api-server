@@ -5,20 +5,23 @@ module.exports = function(sequelize, DataTypes) {
         primaryKey:true,
         autoIncrement: true
     },
-    firstname:DataTypes.TEXT,
-    lastname:DataTypes.TEXT,
+    name:DataTypes.TEXT,
     email:{
         type:DataTypes.CHAR(255),
         allowNull: false,
         unique:true
     },
-    active:DataTypes.TEXT,
+    role:{
+      type:DataTypes.INTEGER//1:用户,2:管理员
+    },
     password:{
       allowNull: false,
       type:DataTypes.TEXT
     }
   },{
-    timestamps: false
+    timestamps: false,
+    collate: 'utf8_general_ci',
+    charset:'utf8'//在这里设置编码....
   });
 
   User.associate = function(models) {

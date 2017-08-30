@@ -151,6 +151,7 @@ app.use(require('./routes/routes-users.js'));
 app.use(require('./routes/routes-score.js'));
 app.use(require('./routes/routes-wx.js'));
 app.use(require('./routes/routes-csrf.js'));
+app.use(require('./routes/routes-cms.js'));
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
 
