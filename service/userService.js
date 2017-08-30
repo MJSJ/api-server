@@ -70,7 +70,6 @@ class UserService {
 
         if (user) {
             // submitted credentials validate: create JWT & record it in a cookie
-
             const payload = {
                 id:       user.id,                                    // to get user details
                 remember: ctx.request.body['remember-me'] ? true : false, // whether token can be renewed
@@ -93,7 +92,11 @@ class UserService {
             ctx.body = {
                 code:"200",
                 data:{
-                    success:true
+                    success:true,
+                    user: {
+                        id: user.id,
+                        username: user.username
+                    }
                 }
             }
         } else {
