@@ -9,12 +9,26 @@ const sequelize = model.sequelize;
 class SubjectDAO {
     static async getSubjectList(id) {
         const subjects = await model.subject.findAll({
-            attributes: { exclude: ['id','userId'] },
+            attributes: { exclude: ['userId'] },
+            
             where: {
                 userId: id
             },
+            include: [{
+                model:model.user,
+                attributes:['name','id']
+            },{
+                model:model.history,
+                attributes:['createdAt','userId'],
+                include:[{
+                    model:model.user,
+                    attributes:['name']
+                }]
+            }],
+  
             order: [
-                ['createdAt', 'DESC']
+                ['createdAt', 'DESC'],
+                [model.history,'createdAt', 'DESC']
             ]
         })
         return subjects

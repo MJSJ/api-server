@@ -17,12 +17,30 @@ class SubjectService {
             return;
         }
         const result = await SubjectDAO.getSubjectList(loginUser.id)
-        // result.map((item)=>{
-        //     // item.history
-        // })
+        let sResult = [];
+        result.map((item)=>{
+            // item.history
+            let sItem = {}
+            if(item.user){
+                sItem.owner = {
+                    name:item.user.name,
+                    id:item.user.id
+                }
+            }
+            if(item.histories){
+                console.log(item.histories[0].createdAt)
+                sItem.lastEdit = {
+                    userName:item.histories[0].user.name,
+                    time:item.histories[0].createdAt,
+                }
+            }
+            sItem.name = item.name;
+            sItem.id = item.id;
+            sResult.push(sItem)
+        })
         ctx.body = {
             code:"200",
-            data:result
+            data:sResult
         }
     }
 

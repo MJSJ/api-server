@@ -68,31 +68,8 @@ $ npm start
 
 ```sql
 
-create database `api_server`;
+CREATE DATABASE `api_server` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 use `api_server`;
-
-create table User (
-  id  integer unsigned not null auto_increment,
-  name  text,
-  email     text not null,
-  role    integer,
-  password  text not null,
-  primary key       (id),
-  unique  key email (email(24))
-) engine=InnoDB charset=utf8 auto_increment=100001;
-
-create table Score (
-  id integer unsigned not null auto_increment,
-  num   integer not null,
-  userId integer unsigned not null,
-  cretedAt DATETIME NOT NULL,
-  updateAt DATETIME NOT NULL,
-  primary key (id),
-  foreign key (userId) references User(userId)
-) engine=InnoDB charset=utf8 auto_increment=100001;
-
-
-
 
 ```
 
