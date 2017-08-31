@@ -7,13 +7,13 @@ const model  = require('../models/index.js');
 const sequelize = model.sequelize;
 
 class SubjectDAO {
-    static async getSubjectList(id) {
+    static async getSubjectList(userID) {
         let subjects;
-        if(id){
+        if(userID){
             subjects = await model.subject.findAll({
                 attributes: { exclude: ['userId'] },
                 where: {
-                    userId: id
+                    userId: userID
                 },
                 include: [{
                     model:model.user,
@@ -84,6 +84,77 @@ class SubjectDAO {
             })
         }catch(e){
 
+        }
+    }
+
+    static async getSubject(subjectID,userID){
+        let subject;
+        try{
+            if(userID){
+                subject = await model.subject.findOne({
+                    attributes: { exclude: ['userId'] },
+                    where: {
+                        userId: userID,
+                        id:subjectID
+                    },
+                    include: [{
+                        model:model.user,
+                        attributes:['name','id']
+                    },{
+                        model:model.history,
+                        attributes:['createdAt','userId','tag','content'],
+                        include:[{
+                            model:model.user,
+                            attributes:['name']
+                        }]
+                    }]
+                })
+            }else{
+                subject = await model.subject.findOne({
+                    attributes: { exclude: ['userId'] },
+                    where: {
+                        id:subjectID
+                    },
+                    include: [{
+                        model:model.user,
+                        attributes:['name','id']
+                    },{
+                        model:model.history,
+                        attributes:['createdAt','userId','tag','content'],
+                        include:[{
+                            model:model.user,
+                            attributes:['name']
+                        }]
+                    }]
+                })
+            }
+            return subject;
+        }catch(e){
+            console.error(e);
+            throw e;
+        }
+    }
+
+    static async deleteSubject(subjectID,userID){
+        try{
+            if(userID){
+                await model.subject.destroy({
+                    where: { 
+                        id: subjectID,
+                        userId: userID
+                    }
+                })
+            }else{
+                await model.subject.destroy({
+                    where: { 
+                        id: subjectID
+                    }
+                })
+            }
+        }catch(e){
+            console.error(e);
+            Lib.logException('model.subject.deleteSubject', e);
+            throw(e)
         }
     }
 

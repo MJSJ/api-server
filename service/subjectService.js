@@ -108,12 +108,52 @@ class SubjectService {
             return;
         }
 
-        const result = await SubjectDAO.getSubject(subjectID)
+        try{
+            let result;
+            if(loginUser.role == 2){
+                result = await SubjectDAO.getSubject(subjectID)
+            }else{
+                result = await SubjectDAO.getSubject(subjectID,loginUser.id)
+            }
+            let sResult;
+            sResult = {
+                name:result.name,
+                id:result.id,
+                owner:{
+                    name:result.user.name,
+                    id:result.user.id
+                },
+                history:[]
+            }
+            if(result.histories&&result.histories.length>0){
+                result.histories.map((item)=>{
+                    sResult.history.push(
+                        {
+                            tag:item.tag,
+                            content:item.content,
+                            time:item.createdAt,
+                            userName:item.user.name
+                        }
+                    )
+                })
+            }
 
-        ctx.body = {
-            code:"200",
-            data:result
+            ctx.body = {
+                code:"200",
+                data:sResult
+            }
+        }catch(e){
+            console.error(e)
+            ctx.body = {
+                code:"404",
+                data:{
+                    success:false,
+                    msg:e
+                }
+            }
         }
+
+        
     }
 
     static async deleteSubject(ctx){
@@ -130,10 +170,28 @@ class SubjectService {
         }
 
         const {subjectID} = ctx.request.body
-        const result = await SubjectDAO.deleteSubject(subjectID)
-        ctx.body = {
-            code:"200",
-            data:result
+
+        try{
+            if(loginUser.role == 2){
+                await SubjectDAO.deleteSubject(subjectID)
+            }else{
+                await SubjectDAO.deleteSubject(subjectID,loginUser.id)
+            }
+            ctx.body = {
+                code:"200",
+                data:{
+                    success:true
+                }
+            }
+        }catch(e){
+            console.error(e);
+            ctx.body = {
+                code:"404",
+                data:{
+                    success:false,
+                    msg:e
+                }
+            }
         }
     }
     

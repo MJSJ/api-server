@@ -29,9 +29,9 @@ class UserDAO {
                 where: {
                     [field]: value
                 },
-                // order:[
-                //     ['name', 'DESC']
-                // ]
+                order:[
+                    ['name', 'DESC']
+                ]
             })
 
             return users;
