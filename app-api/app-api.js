@@ -33,11 +33,10 @@ app.use(cors({
 
 // csrf
 app.use(async function checkCsrf(ctx, next) {
-    if (ctx.path !== '/api/setToken'){
-        // console.log(ctx.session);
-        console.log(ctx.session)
-    }
     await next();
+    // if (ctx.path !== '/api/setToken'){
+        // console.log(ctx.session);
+    // }
     // if (ctx.path === '/api/setToken' || ctx.method === 'GET') {
     //     await next();
     //     return;
