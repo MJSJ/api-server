@@ -84,7 +84,6 @@ INSERT INTO User VALUES
  (100003,'Michael','michael@schumacher.com', 2,'ccc'),
  (100004,'Lewis','lewis@hamilton.com', 2,'ddd'),
  (100005,'Juan Manuel','juan-manuel@fangio.com', 1,'aaa');
-
  
 
 INSERT INTO Score VALUES 
@@ -96,15 +95,15 @@ INSERT INTO Score VALUES
 
 
  INSERT INTO Subject VALUES 
- (100001,'什么专题','2017-06-18 11:23:49',100001),
- (100002,'J8专题','2017-06-18 11:23:49',100001),
+ (100001,'什么专题','2017-06-17 11:23:49',100001),
+ (100002,'J8专题','2017-06-19 08:13:12',100001),
  (100003,'Y2专题','2017-06-18 11:23:49',100002);
 
 
  INSERT INTO History VALUES 
  (100001,'v1','./static/a.html','2017-06-18 11:23:49',100001,100001),
  (100002,'v22','./static/a2.html','2017-07-18 11:23:59',100001,100002), 
- (100003,'什么版本','./static/bb.html','2017-07-18 11:23:59',100002,100003);
+ (100003,'什么版本','./static/bb.html','2017-05-22 11:23:59',100002,100003);
 
 ```
 [原版：https://github.com/chrisveness/koa-sample-web-app-api-mysql)](https://github.com/chrisveness/koa-sample-web-app-api-mysql)
