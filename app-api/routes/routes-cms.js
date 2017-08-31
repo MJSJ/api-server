@@ -6,7 +6,7 @@
 
 const router = require('koa-router')(); // router middleware for koa
 
-const SubjectService = require('../../service/SubjectService.js');
+const SubjectService = require('../../service/subjectService.js');
 
 router.get('/fetchSubjectList',    SubjectService.fetchSubjectList);
 
