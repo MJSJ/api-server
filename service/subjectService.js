@@ -1,7 +1,7 @@
 'use strict';
 
 const UserDAO = require('../dao/userDAO.js');
-const SubjectDAO = require('../dao/SubjectDAO.js');
+const SubjectDAO = require('../dao/subjectDAO.js');
 class SubjectService {
 
     static async fetchSubjectList(ctx){
