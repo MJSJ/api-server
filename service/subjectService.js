@@ -1,7 +1,7 @@
 'use strict';
 
 const UserDAO = require('../dao/userDAO.js');
-const SubjectDAO = require('../dao/SubjectDAO.js');
+const SubjectDAO = require('../dao/subjectDAO.js');
 class SubjectService {
 
     static async fetchSubjectList(ctx){
@@ -16,10 +16,18 @@ class SubjectService {
             }
             return;
         }
-        const result = await SubjectDAO.getSubjectList(loginUser.id)
+
+        let result;
+        //管理员所有的都能看到
+        if(loginUser.role == 2)
+            result = await SubjectDAO.getSubjectList()
+        else
+            result = await SubjectDAO.getSubjectList(loginUser.id)
+
         let sResult = [];
+
+        //COMPOSE DATA
         result.map((item)=>{
-            // item.history
             let sItem = {}
             if(item.user){
                 sItem.owner = {
@@ -27,8 +35,7 @@ class SubjectService {
                     id:item.user.id
                 }
             }
-            if(item.histories){
-                console.log(item.histories[0].createdAt)
+            if(item.histories&&item.histories.length>0){
                 sItem.lastEdit = {
                     userName:item.histories[0].user.name,
                     time:item.histories[0].createdAt,
