@@ -2,6 +2,7 @@
 
 const UserDAO = require('../dao/userDAO.js');
 const SubjectDAO = require('../dao/subjectDAO.js');
+const Lib        = require('../lib/lib.js');
 class SubjectService {
 
     static async fetchSubjectList(ctx){
@@ -63,16 +64,20 @@ class SubjectService {
             }
             return;
         }
-        const {subjectID,content,tag} = ctx.request.body
+        const {subjectID,content,tag,subjectName} = ctx.request.body
 
        
         try{
+            //先存fs
+            let url = await SubjectService.saveHTML(content);
+            let result;
             if(!subjectID){
                 //新建专题
-                const result = await SubjectDAO.addSubject(content,tag,loginUser.id);
+                
+                result = await SubjectDAO.addSubject(url,tag,loginUser.id,subjectName);
             }else{
                 //更改专题 ==》添加历史
-                const result = await SubjectDAO.addHistory(content,tag,loginUser.id,subjectID)
+                result = await SubjectDAO.addHistory(url,tag,loginUser.id,subjectID)
             }
 
             ctx.body = {
@@ -82,6 +87,8 @@ class SubjectService {
                 }
             }
         }catch(e){
+            console.error(e)
+            Lib.logException('add or update subject fialed:  ', e)
             ctx.body = {
                 code:"400",
                 data:{
@@ -144,6 +151,7 @@ class SubjectService {
             }
         }catch(e){
             console.error(e)
+            Lib.logException('fetch subject fialed:  ', e)
             ctx.body = {
                 code:"404",
                 data:{
@@ -185,6 +193,7 @@ class SubjectService {
             }
         }catch(e){
             console.error(e);
+            Lib.logException('delete subject fialed:  ', e)
             ctx.body = {
                 code:"404",
                 data:{
@@ -194,6 +203,45 @@ class SubjectService {
             }
         }
     }
+
+    //FS
+    static async saveHTML(content){
+        try{
+            //TODO
+            return content
+        }catch(e){
+            console.error(e);
+            Lib.logException('fs save html fialed:  ', e)
+            throw(e)
+        }
+
+    }
+
+
+    // static async addHistory(){
+    //     const loginUser =  ctx.session.loginUser
+    //     if(!loginUser){
+    //         ctx.body = {
+    //             code:"404",
+    //             data:{
+    //                 success:false,
+    //                 msg:'not login'
+    //             }
+    //         }
+    //         return;
+    //     }
+
+    //     const {subjectID,content,tag,subjectName} = ctx.request.body
+    //     let result;
+    //     try{
+    //         result = await SubjectDAO.addHistory(url,tag,loginUser.id,subjectID)
+    //     }catch(e){
+    //         console.error(e);
+    //         Lib.logException('history add fialed:  ', e)
+    //         throw(e)
+    //     }
+
+    // }
     
 }
 

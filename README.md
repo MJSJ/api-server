@@ -104,6 +104,7 @@ INSERT INTO Score VALUES
  (100001,'v1','./static/a.html','2017-06-18 11:23:49',100001,100001),
  (100002,'v22','./static/a2.html','2017-07-18 11:23:59',100001,100002), 
  (100003,'什么版本','./static/bb.html','2017-05-22 11:23:59',100002,100003);
+  (100003,'y2专题的版本','./static/yyy.html','2017-08-19 11:23:59',100003,100003);
 
 ```
 [原版：https://github.com/chrisveness/koa-sample-web-app-api-mysql)](https://github.com/chrisveness/koa-sample-web-app-api-mysql)

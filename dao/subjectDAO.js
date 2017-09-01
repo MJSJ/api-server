@@ -56,21 +56,24 @@ class SubjectDAO {
         return subjects
     }
 
-    static async addSubject(content,tag,userID){
+    static async addSubject(content,tag,userID,subjectName){
         try {
             return sequelize.transaction(function (t) {
                 return model.subject.create({
-                    name:subjectName
+                    name:subjectName,
+                    userId:userID
                 }, {transaction: t}).then(function (subject) {
-                    this.addHistory(content,tag,userID,subjectID)
+                    SubjectDAO.addHistory(content,tag,userID,subject.id)
                 });
             }).then(function (result) {
                 return true
             }).catch(()=>{
                 return false
             })
-        } catch (error) {
-            return false
+        } catch (e) {
+            console.error(e)
+            Lib.logException('model.subject.addSubject', e);
+            throw(e)
         }
     }
 
@@ -82,8 +85,11 @@ class SubjectDAO {
                 userId:userID,
                 subjectId:subjectID
             })
+            return true
         }catch(e){
-
+            console.error(e)
+            Lib.logException('model.subject.addSubject', e);
+            throw(e)
         }
     }
 
@@ -130,6 +136,7 @@ class SubjectDAO {
             }
             return subject;
         }catch(e){
+            Lib.logException('model.subject.getSubject', e);
             console.error(e);
             throw e;
         }
