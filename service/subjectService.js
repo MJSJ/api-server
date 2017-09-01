@@ -122,32 +122,42 @@ class SubjectService {
             }else{
                 result = await SubjectDAO.getSubject(subjectID,loginUser.id)
             }
-            let sResult;
-            sResult = {
-                name:result.name,
-                id:result.id,
-                owner:{
-                    name:result.user.name,
-                    id:result.user.id
-                },
-                history:[]
-            }
-            if(result.histories&&result.histories.length>0){
-                result.histories.map((item)=>{
-                    sResult.history.push(
-                        {
-                            tag:item.tag,
-                            content:item.content,
-                            time:item.createdAt,
-                            userName:item.user.name
-                        }
-                    )
-                })
-            }
+            if(!result){
+                ctx.body = {
+                    code:"200",
+                    data:{
+                        success:true,
+                        data:null
+                    }
+                }
+            }else{
+                let sResult;
+                sResult = {
+                    name:result.name,
+                    id:result.id,
+                    owner:{
+                        name:result.user.name,
+                        id:result.user.id
+                    },
+                    history:[]
+                }
+                if(result.histories&&result.histories.length>0){
+                    result.histories.map((item)=>{
+                        sResult.history.push(
+                            {
+                                tag:item.tag,
+                                content:item.content,
+                                time:item.createdAt,
+                                userName:item.user.name
+                            }
+                        )
+                    })
+                }
 
-            ctx.body = {
-                code:"200",
-                data:sResult
+                ctx.body = {
+                    code:"200",
+                    data:sResult
+                }
             }
         }catch(e){
             console.error(e)
