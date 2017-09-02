@@ -128,6 +128,59 @@ class UserService {
         }
     }
 
+    static async deleteUser(ctx) {
+
+        if(!ctx.session.loginUser||ctx.session.loginUser.role!==2){
+            ctx.body = {
+                code:"204",
+                data:{
+                    success:false,
+                    msg:'not login or no privilege'
+                }
+            }
+            return;
+        }
+        const {userID} = ctx.request.body
+        if(!userID)
+            ctx.body = {
+                code:"400",
+                data:{
+                    success:false,
+                    msg:"参数不合法"
+                }
+            }
+
+        try {
+            const result = await UserDAO.deleteUser(userID);
+            if (result)
+                ctx.body = {
+                    code:"200",
+                    data:{
+                        success:true
+                    }
+                }
+            else
+                ctx.body = {
+                    code:"400",
+                    data:{
+                        success:false,
+                        msg:"操作失败"
+                    }
+                }
+        } catch (error) {
+            console.error(error)
+            throw(error)
+            ctx.body = {
+                code:"400",
+                data:{
+                    success:false,
+                    msg:error
+                }
+            }
+        }
+        
+    }
+
     static async doSomething(ctx){
         if(ctx.session.loginUser){
             ctx.body = {

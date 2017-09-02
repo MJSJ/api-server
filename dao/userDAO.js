@@ -56,6 +56,23 @@ class UserDAO {
         }
     }
 
+    static async deleteUser(userID){
+        try{
+            await model.user.destroy({
+                where: { 
+                    id: userID
+                }
+            })
+            return true
+        }catch(e){
+            console.error(e)
+            throw(e)
+            return false
+        }
+    }
+
+    
+
     static async getByEmail(value) {
         try {
             const users = await model.user.findAll({
