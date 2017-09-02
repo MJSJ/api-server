@@ -21,7 +21,7 @@ module.exports = function(sequelize, DataTypes) {
         Subject.belongsTo(models.user, {
           onDelete: "CASCADE",
           foreignKey: {
-            allowNull: false
+            allowNull: true
           }
         });
         Subject.hasMany(models.history);

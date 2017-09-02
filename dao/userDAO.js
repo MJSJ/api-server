@@ -43,6 +43,19 @@ class UserDAO {
         }
     }
 
+    static async addUser(name,password){
+        try{
+            const user = await model.user.create({
+                name:name,
+                password:password
+            })
+            return user;
+        }catch(e){
+            console.error(e)
+            throw(e)
+        }
+    }
+
     static async getByEmail(value) {
         try {
             const users = await model.user.findAll({

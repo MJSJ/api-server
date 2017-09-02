@@ -18,12 +18,14 @@ class SubjectService {
             return;
         }
 
+        //status = 1     返回没有owner的list
+        const status = parseInt(ctx.query.status);
         let result;
         //管理员所有的都能看到
         if(loginUser.role == 2)
-            result = await SubjectDAO.getSubjectList()
+            result = await SubjectDAO.getSubjectList({status})
         else
-            result = await SubjectDAO.getSubjectList(loginUser.id)
+            result = await SubjectDAO.getSubjectList({userID:loginUser.id,status})
 
         let sResult = [];
 
@@ -73,7 +75,6 @@ class SubjectService {
             let result;
             if(!subjectID){
                 //新建专题
-                
                 result = await SubjectDAO.addSubject(url,tag,loginUser.id,subjectName);
             }else{
                 //更改专题 ==》添加历史
@@ -252,6 +253,60 @@ class SubjectService {
     //     }
 
     // }
+
+
+
+
+    static async updateCompany(ctx){
+        if(!ctx.session.loginUser||ctx.session.loginUser.role!==2){
+            ctx.body = {
+                code:"204",
+                data:{
+                    success:false,
+                    msg:'not login or no privilege'
+                }
+            }
+            return;
+        }
+        
+        //name:公司名字
+        const {name,password,id,subjectList} = ctx.request.body
+        try{
+            // 修改
+            let result;
+            if(id)
+                result = SubjectDAO.updateCompany(id,subjectList);
+            else
+                result = SubjectDAO.addCompany(name,password,subjectList)
+
+            //没有异常就返回
+            if(result)
+                ctx.body = {
+                    code:"200",
+                    data:{
+                        success:true
+                    }
+                }
+            else
+                ctx.body = {
+                    code:"404",
+                    data:{
+                        success:false,
+                        msg:'操作失败'
+                    }
+                }
+        }catch(e){
+            console.error(e)
+            throw e
+            ctx.body = {
+                code:"404",
+                data:{
+                    success:false,
+                    msg:'操作失败'
+                }
+            }
+        }
+    }
     
 }
 

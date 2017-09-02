@@ -8,7 +8,7 @@ module.exports = function(sequelize, DataTypes) {
     name:DataTypes.TEXT,
     email:{
         type:DataTypes.CHAR(255),
-        allowNull: false,
+        allowNull: true,  //给公司添加帐户可以不需要email
         unique:true
     },
     role:{
