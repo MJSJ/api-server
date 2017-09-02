@@ -3,21 +3,26 @@
 const UserDAO = require('../dao/userDAO.js');
 const SubjectDAO = require('../dao/subjectDAO.js');
 const Lib        = require('../lib/lib.js');
+const loginInterceptor  = require("../lib/loginInterceptor").loginInterceptor;
+const adminInterceptor  = require("../lib/loginInterceptor").adminInterceptor;
+
+function log(target, name, descriptor) {
+    var oldValue = descriptor.value;
+  
+    descriptor.value = function() {
+      console.log(`Calling "${name}" with`, arguments);
+      return oldValue.apply(null, arguments);
+    };
+  
+    return descriptor;
+  }
+  
 class SubjectService {
 
     static async fetchSubjectList(ctx){
-        const loginUser =  ctx.session.loginUser
-        if(!loginUser){
-            ctx.body = {
-                code:"404",
-                data:{
-                    success:false,
-                    msg:'not login'
-                }
-            }
-            return;
-        }
+        if(loginInterceptor(ctx)) return 
 
+        const loginUser =  ctx.session.loginUser
         //status = 1     返回没有owner的list
         const status = parseInt(ctx.query.status);
         let result;
@@ -55,17 +60,8 @@ class SubjectService {
     }
 
     static async updateSubject(ctx){
+        if(loginInterceptor(ctx)) return 
         const loginUser =  ctx.session.loginUser
-        if(!loginUser){
-            ctx.body = {
-                code:"404",
-                data:{
-                    success:false,
-                    msg:'not login'
-                }
-            }
-            return;
-        }
         const {subjectID,content,tag,subjectName} = ctx.request.body
 
        
@@ -103,19 +99,10 @@ class SubjectService {
     }
 
     static async fetchSubject(ctx){
+        if(loginInterceptor(ctx)) return 
+            
         const loginUser =  ctx.session.loginUser
         const subjectID = parseInt(ctx.query.subjectID);
-        if(!loginUser){
-            ctx.body = {
-                code:"404",
-                data:{
-                    success:false,
-                    msg:'not login'
-                }
-            }
-            return;
-        }
-
         try{
             let result;
             if(loginUser.role == 2){
@@ -176,18 +163,8 @@ class SubjectService {
     }
 
     static async deleteSubject(ctx){
+        if(loginInterceptor(ctx)) return 
         const loginUser =  ctx.session.loginUser
-        if(!loginUser){
-            ctx.body = {
-                code:"404",
-                data:{
-                    success:false,
-                    msg:'not login'
-                }
-            }
-            return;
-        }
-
         const {subjectID} = ctx.request.body
 
         try{
@@ -258,16 +235,7 @@ class SubjectService {
 
 
     static async updateCompany(ctx){
-        if(!ctx.session.loginUser||ctx.session.loginUser.role!==2){
-            ctx.body = {
-                code:"204",
-                data:{
-                    success:false,
-                    msg:'not login or no privilege'
-                }
-            }
-            return;
-        }
+        if(adminInterceptor(ctx)) return 
         
         //name:公司名字
         const {name,password,id,subjectList} = ctx.request.body
