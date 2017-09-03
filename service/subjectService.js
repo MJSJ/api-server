@@ -198,6 +198,19 @@ class SubjectService {
         }
     }
 
+    // render html
+    static async renderSubject (ctx) {
+        try{
+            const subjectId = ctx.params.id;
+            let r = fs.readFileSync(path.join(STATIC_PATH, subjectId.toString(), 'index.html'),'utf-8');
+            ctx.body = r;
+        }catch(e){
+            console.error(e);
+            Lib.logException('fs get html fialed:  ', e)
+            throw(e)
+        }
+    }
+
     //read html file
     static async getHTML (histories, subjectID) {
         let result = [];
