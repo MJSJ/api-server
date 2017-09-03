@@ -6,12 +6,10 @@ module.exports = function(sequelize, DataTypes) {
           autoIncrement: true
       },
       tag:{
-          type:DataTypes.STRING(45),
-          unique:true
+          type:DataTypes.STRING(45)
       },
       content:{
-          type:DataTypes.STRING(255),
-          unique:true
+          type:DataTypes.STRING(255)
       },
     },{
         timestamps: true,

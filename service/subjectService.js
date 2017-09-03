@@ -68,21 +68,31 @@ class SubjectService {
         try{
             //先存fs
             let url = await SubjectService.saveHTML(content);
-            let result;
+            let resultID;
             if(!subjectID){
                 //新建专题
-                result = await SubjectDAO.addSubject(url,tag,loginUser.id,subjectName);
+                resultID = await SubjectDAO.addSubject(url,tag,loginUser.id,subjectName);
             }else{
                 //更改专题 ==》添加历史
-                result = await SubjectDAO.addHistory(url,tag,loginUser.id,subjectID)
+                resultID = await SubjectDAO.addHistory(url,tag,loginUser.id,subjectID)
             }
 
-            ctx.body = {
-                code:"200",
-                data:{
-                    success:result
+            if(!resultID)
+                ctx.body ={
+                    code:"204",
+                    data:{
+                        success:false,
+                        msg:"专题名重复或系统错误"
+                    }
                 }
-            }
+            else
+                ctx.body = {
+                    code:"200",
+                    data:{
+                        success:true
+                    }
+                }
+                
         }catch(e){
             console.error(e)
             Lib.logException('add or update subject fialed:  ', e)

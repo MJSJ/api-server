@@ -92,11 +92,17 @@ class SubjectDAO {
                     name:subjectName,
                     // userId:userID
                 }, {transaction: t}).then(function (subject) {
-                    SubjectDAO.addHistory(content,tag,userID,subject.id)
+                    return model.history.create({
+                        tag:tag,
+                        content:content,
+                        userId:userID,
+                        subjectId:subject.id
+                    },{transaction:t})
                 });
             }).then(function (result) {
-                return true
-            }).catch(()=>{
+                return result.subjectId
+            }).catch((e)=>{
+                console.error(e)
                 return false
             })
         } catch (e) {
@@ -114,11 +120,12 @@ class SubjectDAO {
                 userId:userID,
                 subjectId:subjectID
             })
-            return true
+            return subjectID
         }catch(e){
             console.error(e)
             Lib.logException('model.subject.addSubject', e);
             throw(e)
+            return false
         }
     }
 
