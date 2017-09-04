@@ -78,7 +78,7 @@ use `api_server`;
 ```sql
 -- Test data for ‘api-server’ app
 
-INSERT INTO User VALUES 
+INSERT INTO user VALUES 
  (100001,'旷宇','yursile@hamilton.com', 2,'ddd'),
  (100002,'Ayrton','ayrton@senna.com', 1,'bbb'),
  (100003,'Michael','michael@schumacher.com', 2,'ccc'),
@@ -86,7 +86,7 @@ INSERT INTO User VALUES
  (100005,'Juan Manuel','juan-manuel@fangio.com', 1,'aaa');
  
 
-INSERT INTO Score VALUES 
+INSERT INTO score VALUES 
  (100001,'99','2017-06-18 11:23:49','2017-06-18 11:23:49',100001),
  (100002,'993','2017-06-18 11:23:49','2017-06-18 11:23:49',100001),
  (100003,'994','2017-06-18 11:23:49','2017-06-18 11:23:49',100001),
