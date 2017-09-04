@@ -5,6 +5,9 @@ const SubjectDAO = require('../dao/subjectDAO.js');
 const Lib        = require('../lib/lib.js');
 const loginInterceptor  = require("../lib/loginInterceptor").loginInterceptor;
 const adminInterceptor  = require("../lib/loginInterceptor").adminInterceptor;
+const path = require("path");
+const fs = require("fs");
+const STATIC_PATH = path.join(__dirname, '../s');
 
 function log(target, name, descriptor) {
     var oldValue = descriptor.value;
@@ -67,12 +70,14 @@ class SubjectService {
        
         try{
             //先存fs
-            let url = await SubjectService.saveHTML(content);
             let resultID;
+            let url;
             if(!subjectID){
                 //新建专题
                 resultID = await SubjectDAO.addSubject(url,tag,loginUser.id,subjectName);
+                if(resultID) await SubjectService.saveHTML(content, resultID, 0);
             }else{
+                let url = await SubjectService.saveHTML(content, subjectID, 1);
                 //更改专题 ==》添加历史
                 resultID = await SubjectDAO.addHistory(url,tag,loginUser.id,subjectID)
             }
@@ -92,7 +97,8 @@ class SubjectService {
                         success:true
                     }
                 }
-                
+            
+            
         }catch(e){
             console.error(e)
             Lib.logException('add or update subject fialed:  ', e)
@@ -110,7 +116,6 @@ class SubjectService {
 
     static async fetchSubject(ctx){
         if(loginInterceptor(ctx)) return 
-            
         const loginUser =  ctx.session.loginUser
         const subjectID = parseInt(ctx.query.subjectID);
         try{
@@ -140,16 +145,7 @@ class SubjectService {
                     history:[]
                 }
                 if(result.histories&&result.histories.length>0){
-                    result.histories.map((item)=>{
-                        sResult.history.push(
-                            {
-                                tag:item.tag,
-                                content:item.content,
-                                time:item.createdAt,
-                                userName:item.user.name
-                            }
-                        )
-                    })
+                    sResult.history = await SubjectService.getHTML(result.histories, subjectID);
                 }
 
                 ctx.body = {
@@ -202,17 +198,87 @@ class SubjectService {
         }
     }
 
-    //FS
-    static async saveHTML(content){
+    // render html
+    static async renderSubject (ctx) {
         try{
-            //TODO
-            return content
+            const subjectId = ctx.params.id;
+            let r = fs.readFileSync(path.join(STATIC_PATH, subjectId.toString(), 'index.html'),'utf-8');
+            ctx.body = r;
+        }catch(e){
+            console.error(e);
+            Lib.logException('fs get html fialed:  ', e)
+            throw(e)
+        }
+    }
+
+    //read html file
+    static async getHTML (histories, subjectID) {
+        let result = [];
+        histories.map((item)=>{
+            let contentText = '';
+            try{
+                if(!item.content){
+                    contentText = fs.readFileSync(path.join(STATIC_PATH, subjectID.toString(), 'index.html'),'utf-8');
+                } else {
+                    contentText = fs.readFileSync(path.join(STATIC_PATH, subjectID.toString(), item.content),'utf-8');
+                }
+            }catch(e){
+                console.error(e);
+                Lib.logException('fs get html fialed:  ', e)
+                throw(e)
+            }
+            result.push(
+                {
+                    tag:item.tag,
+                    content: contentText,
+                    time:item.createdAt,
+                    userName:item.user.name
+                }
+            )
+        });
+        return result;
+    }
+
+    //set html file
+    static async saveHTML(content, subjectID, tp){
+        let htmlName = 'index';
+        let dir = subjectID.toString();
+        try{
+            //写入磁盘
+            if(!tp){
+                // 新建专题
+                htmlName = 'index.html';
+                
+                let destPath = path.join(STATIC_PATH, dir);
+                
+                if(!fs.existsSync(destPath)){
+                    fs.mkdirSync(destPath);
+                }
+
+                fs.writeFileSync(path.join(destPath, htmlName), content);
+                return dir;
+            } else {
+                // 编辑专题
+                let destPath = path.join(STATIC_PATH, dir);
+                
+                if(!fs.existsSync(destPath)){
+                    fs.mkdirSync(destPath);
+                }
+
+                // rename index
+                htmlName += (Date.parse(new Date())/1000).toString() +　'.html';
+                fs.renameSync(path.join(destPath, 'index.html'),
+                                path.join(destPath, htmlName));
+                
+                fs.writeFileSync(path.join(destPath, 'index.html'), content);
+                
+                return htmlName;
+            }
         }catch(e){
             console.error(e);
             Lib.logException('fs save html fialed:  ', e)
             throw(e)
         }
-
     }
 
 
