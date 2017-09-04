@@ -38,7 +38,12 @@ class UserService {
             ctx.body = {
                 code:"200",
                 data:{
-                    success:true
+                    success:true,
+                    user: {
+                        id: user.id,
+                        name: user.name,
+                        role: user.role
+                    }
                 }
             }
             return;
