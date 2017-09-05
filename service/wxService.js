@@ -137,9 +137,11 @@ class WxService {
         let string1 = 'jsapi_ticket=' + ticket + '&noncestr=' + noncestr + '&timestamp=' + timestamp + '&url=' + url;
         ctx.body = {
             appId: APPID,
+            ticket: ticket,
             timestamp: timestamp,
             nonceStr: noncestr,
             signature: sha1(string1),
+            url: url,
             jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQQ','onMenuShareWeibo','onMenuShareQZone']
         };
     }
