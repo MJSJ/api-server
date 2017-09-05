@@ -8,9 +8,9 @@ const router = require('koa-router')(); // router middleware for koa
 
 const UserService = require('../../service/userService.js');
 
-router.post(  '/login',     UserService.postLogin); 
-router.post(  '/deleteUser',     UserService.deleteUser);
-router.get(   '/logout',    UserService.getLogout);
+router.post(  '/cms/login',     UserService.postLogin); 
+router.post(  '/cms/deleteUser',     UserService.deleteUser);
+router.get(   '/cms/logout',    UserService.getLogout);
 router.get(   '/users',     UserService.getUsers);       // list users
 router.get(   '/users/:id', UserService.getUserById);    // get user details
 router.get(   '/doSomething',  UserService.doSomething); 
