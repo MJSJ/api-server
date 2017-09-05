@@ -89,13 +89,13 @@ class WxService {
 
     static async setStateTicket () {
         let ticket = await WxService.get_base_ticket();
-        if(ticket.ticket){
+        if(ticket){
             this.ticket = {
-                value: ticket.ticket,
+                value: ticket,
                 created_at: Date.parse(new Date())/1000
             }
         }
-        return ticket.ticket;
+        return ticket;
     }
 
     static async get_token () {
