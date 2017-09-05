@@ -138,6 +138,7 @@ class WxService {
 
     static async get_js_ticket () {
         let token = await WxService.get_token();
+        console.log(token);
         return await WxService.get_tickect(token);
     }
 
