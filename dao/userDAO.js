@@ -25,7 +25,7 @@ class UserDAO {
                 ['name', 'DESC']
             ]
         })
-        
+
         return users
     }
 
@@ -46,7 +46,6 @@ class UserDAO {
                     ['name', 'DESC']
                 ]
             })
-
             return users;
         } catch (e) {
             switch (e.code) {

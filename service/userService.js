@@ -48,9 +48,11 @@ class UserService {
             }
             return;
         }
+        //email 和 userID都可以登录
         const username = ctx.request.body.username;
         const password = ctx.request.body.password;
-        if(!username||!password){
+        const userID = ctx.request.body.userID;
+        if((!userID&&!username)||!password){
             ctx.body = {
                 code:"200",
                 data:{
@@ -60,8 +62,12 @@ class UserService {
             }
             return 
         }
-        let [user] = await UserDAO.getBy('email', username); // lookup user
-        // let [user] = await UserDAO.getByEmail( username); // lookup user
+        let user;
+        if(username){
+            [user] = await UserDAO.getBy('email', username); // lookup user
+        }else{
+            [user] = await UserDAO.getBy('id', userID); // lookup user
+        }
 
         if (user) { // verify password matches
             try {
@@ -109,7 +115,7 @@ class UserService {
             // login failed: redisplay login page with login fail message
             const loginfailmsg = 'E-mail / password not recognised';
             ctx.body = {
-                code:"200",
+                code:"204",
                 data:{
                     success:false,
                     msg:loginfailmsg
