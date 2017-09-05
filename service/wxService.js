@@ -18,6 +18,8 @@ const fs = require('fs');
 const sha1 = require('sha1');
 
 class WxService {
+
+    // 获取基础的access_token
     static async get_base_token () {
         let url = BASE_TOKEN_URL + '&appid=' + APPID + '&secret=' + SECRET;
         return axios.get(url)
@@ -31,6 +33,7 @@ class WxService {
                 });
     }
 
+    // 获取授权登陆的access_token
     static async get_access_token (c) {
         let url = TOKEN_URL + '?' 
                     + 'appid=' + APPID 
@@ -44,6 +47,19 @@ class WxService {
                         return {access_token: '', openid: ''};
                     } else {
                         return res.data;
+                    }
+                });
+    }
+
+    // 获取JS-SDK的ticket
+    static async get_base_ticket (access_token) {
+        let url = TICKET_URL + '?access_token=' + access_token + '&type=jsapi';
+        return axios.get(url)
+                .then(res => {
+                    if(res.data.errcode === 0){
+                        return res.data.ticket; 
+                    } else {
+                        return null;
                     }
                 });
     }
@@ -75,6 +91,17 @@ class WxService {
         return token.access_token;
     }
 
+    static async setStateTicket () {
+        let ticket = await WxService.get_base_ticket();
+        if(ticket){
+            this.ticket = {
+                value: ticket,
+                created_at: Date.parse(new Date())/1000
+            }
+        }
+        return ticket;
+    }
+
     static async get_token () {
         let token;
         if(this.hasOwnProperty('access_token')){
@@ -92,40 +119,27 @@ class WxService {
         return token;
     }
 
-    static get_tickect () {
+    static async get_tickect (token) {
+        let ticket;
         if(this.hasOwnProperty('ticket')){
             let created_at = this.ticket.created_at;
             let now = Date.parse(new Date())/1000;
             if(now - created_at > 7000){
                 delete this.ticket;
+                ticket = await WxService.setStateTicket(token);
             } else {
                 return this.ticket.value;
             }
         } else {
-            return null;
+            ticket = await WxService.setStateTicket(token);
         }
+        return ticket;
     }
 
     static async get_js_ticket () {
-        let ticket = WxService.get_tickect();
-        if(!ticket){
-            let data = await WxService.get_token();
-            if(data.access_token){
-                let url = TICKET_URL + '?access_token=' + data.access_token + '&type=jsapi';
-                let data = await axios.get(url)
-                            .then(res => {
-                                if(res.data.errcode === 0){
-                                    return res.data.ticket; 
-                                } else {
-                                    return null;
-                                }
-                            });
-            } else {
-                return null;
-            }
-        } else {
-            return ticket;
-        }
+        let token = await WxService.get_token();
+        console.log(token);
+        return await WxService.get_tickect(token);
     }
 
     // 微信授权JS SDK
@@ -137,9 +151,11 @@ class WxService {
         let string1 = 'jsapi_ticket=' + ticket + '&noncestr=' + noncestr + '&timestamp=' + timestamp + '&url=' + url;
         ctx.body = {
             appId: APPID,
+            ticket: ticket,
             timestamp: timestamp,
             nonceStr: noncestr,
             signature: sha1(string1),
+            url: url,
             jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQQ','onMenuShareWeibo','onMenuShareQZone']
         };
     }
