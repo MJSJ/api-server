@@ -5,6 +5,7 @@
 const APPID = 'wxd0124a9e51032874';
 const SECRET = 'a64c71252df6a6611e893c2ba53adf35';
 const TOKEN_URL = 'https://api.weixin.qq.com/sns/oauth2/access_token';
+const BASE_TOKEN_URL='https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential';
 const USER_URL = 'https://api.weixin.qq.com/sns/userinfo';
 const GRANT_TYPE = 'authorization_code';
 const AUTH_URL = 'https://api.weixin.qq.com/sns/userinfo';
@@ -17,6 +18,19 @@ const fs = require('fs');
 const sha1 = require('sha1');
 
 class WxService {
+    static async get_base_token () {
+        let url = BASE_TOKEN_URL + '&appid=' + APPID + '&secret=' + SECRET;
+        return axios.get(url)
+                .then(res => {
+                    if('errcode' in res.data){
+                        console.info(url + ' 请求失败：' +　res.data.errmsg);
+                        return {access_token: ''};
+                    } else {
+                        return res.data;
+                    }
+                });
+    }
+
     static async get_access_token (c) {
         let url = TOKEN_URL + '?' 
                     + 'appid=' + APPID 
@@ -50,23 +64,52 @@ class WxService {
                 });
     }
 
-    static get_tickect () {
-        if(this.state.hasOwnProperty('ticket')){
-            let created_at = this.state.ticket.created_at;
-            let now = Date.parse(new Date())/1000;
-            if(now - created_at > 7000){
-                delete this.state.ticket;
-            } else {
-                return this.state.ticket.value;
+    static async setStateToken () {
+        let token = await WxService.get_base_token();
+        if(token.access_token){
+            this.access_token = {
+                value: token.access_token,
+                created_at: Date.parse(new Date())/1000
             }
         }
-        return null;
+        return token.access_token;
+    }
+
+    static async get_token () {
+        let token;
+        if(this.hasOwnProperty('access_token')){
+            let created_at = this.access_token.created_at;
+            let now = Date.parse(new Date())/1000;
+            if(now - created_at > 7000){
+                delete this.access_token;
+                token = await WxService.setStateToken();
+            } else {
+                return this.access_token.value;
+            }
+        } else {
+            token = await WxService.setStateToken();
+        }
+        return token;
+    }
+
+    static get_tickect () {
+        if(this.hasOwnProperty('ticket')){
+            let created_at = this.ticket.created_at;
+            let now = Date.parse(new Date())/1000;
+            if(now - created_at > 7000){
+                delete this.ticket;
+            } else {
+                return this.ticket.value;
+            }
+        } else {
+            return null;
+        }
     }
 
     static async get_js_ticket () {
         let ticket = WxService.get_tickect();
         if(!ticket){
-            let data = await WxService.get_access_token(code);
+            let data = await WxService.get_token();
             if(data.access_token){
                 let url = TICKET_URL + '?access_token=' + data.access_token + '&type=jsapi';
                 let data = await axios.get(url)
