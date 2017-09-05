@@ -143,7 +143,7 @@ class WxService {
 
     // 微信授权JS SDK
     static async getJsSdkConf (ctx) {
-        let url = ctx.request.header.origin + ctx.url;
+        let url = this.request.path;
         let ticket = await WxService.get_js_ticket();
         let noncestr = Math.random().toString(36).substr(2);
         let timestamp = Date.parse(new Date())/1000;
