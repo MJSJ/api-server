@@ -14,6 +14,7 @@ router.get('/cms/fetchSubject',    SubjectService.fetchSubject);
 router.post('/cms/deleteSubject',    SubjectService.deleteSubject);
 router.post('/cms/updateSubject',    SubjectService.updateSubject);
 router.post('/cms/updateCompany',    SubjectService.updateCompany);
+router.get('/cms/fetchUserList',    SubjectService.fetchUserList);
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
 

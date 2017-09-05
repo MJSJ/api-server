@@ -27,6 +27,9 @@ module.exports = function(sequelize, DataTypes) {
   User.associate = function(models) {
     User.hasMany(models.score);
   }
+  User.associate = function(models) {
+    User.hasMany(models.subject);
+  }
   User.tableName = "user"
   
   return User;

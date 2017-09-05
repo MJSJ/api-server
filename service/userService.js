@@ -40,9 +40,9 @@ class UserService {
                 data:{
                     success:true,
                     user: {
-                        id: user.id,
-                        name: user.name,
-                        role: user.role
+                        id: ctx.session.loginUser.id,
+                        name: ctx.session.loginUser.name,
+                        role: ctx.session.loginUser.role
                     }
                 }
             }

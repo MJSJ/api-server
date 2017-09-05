@@ -15,6 +15,19 @@ class UserDAO {
 
         return users[0]
     }
+    static async getUserListWithSubject(){
+        const users = await model.user.findAll({
+            include: [{
+                model:model.subject,
+                attributes:['name','id']
+            }],
+            order: [
+                ['name', 'DESC']
+            ]
+        })
+        
+        return users
+    }
 
     static async getAll() {
         const users =  await model.user.findAll({

@@ -211,6 +211,38 @@ class SubjectService {
         }
     }
 
+
+    static async fetchUserList(ctx){
+        if(adminInterceptor(ctx)) return 
+        try{
+            const result = await UserDAO.getUserListWithSubject();
+            let sResult = [];
+            result.map((user)=>{
+                sResult.push({
+                    name:user.name,
+                    id:user.id,
+                    password:user.password,
+                    subjectList:user.subjects
+                })
+            })
+            ctx.body={
+                code:"200",
+                data:sResult
+            }
+        }catch(e){
+            console.log(e)
+            ctx.body={
+                code:"204",
+                data:{
+                    success:false,
+                    msg:e
+                }
+            }
+            throw(e)
+        }
+        
+    }
+
     //read html file
     static async getHTML (histories, subjectID) {
         let result = [];
@@ -280,6 +312,9 @@ class SubjectService {
             throw(e)
         }
     }
+
+
+    
 
 
     // static async addHistory(){
