@@ -12,6 +12,10 @@ router.get('/auth/MP_verify_oai1jPbiuXyaD710.txt', async function (ctx) {
     ctx.body = 'oai1jPbiuXyaD710';
 });
 
+router.get('/MP_verify_oai1jPbiuXyaD710.txt', async function (ctx) {
+    ctx.body = 'oai1jPbiuXyaD710';
+});
+
 router.get('/wx/auth/activity', wxSerice.authWxLogin);
 
 router.get('/wx/jssdk', wxSerice.getJsSdkConf);
