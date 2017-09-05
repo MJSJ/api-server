@@ -48,6 +48,18 @@ class WxService {
                 });
     }
 
+    static async get_base_ticket (access_token) {
+        let url = TICKET_URL + '?access_token=' + access_token + '&type=jsapi';
+        return axios.get(url)
+                .then(res => {
+                    if(res.data.errcode === 0){
+                        return res.data.ticket; 
+                    } else {
+                        return null;
+                    }
+                });
+    }
+
     static async get_wx_user (data) {
         let url = AUTH_URL + '?' +
                     'access_token=' + data.access_token + 
@@ -75,6 +87,17 @@ class WxService {
         return token.access_token;
     }
 
+    static async setStateTicket () {
+        let ticket = await WxService.get_base_ticket();
+        if(ticket.ticket){
+            this.ticket = {
+                value: ticket.ticket,
+                created_at: Date.parse(new Date())/1000
+            }
+        }
+        return ticket.ticket;
+    }
+
     static async get_token () {
         let token;
         if(this.hasOwnProperty('access_token')){
@@ -92,40 +115,26 @@ class WxService {
         return token;
     }
 
-    static get_tickect () {
+    static async get_tickect (token) {
+        let ticket;
         if(this.hasOwnProperty('ticket')){
             let created_at = this.ticket.created_at;
             let now = Date.parse(new Date())/1000;
             if(now - created_at > 7000){
                 delete this.ticket;
+                ticket = await WxService.setStateTicket(token);
             } else {
                 return this.ticket.value;
             }
         } else {
-            return null;
+            ticket = await WxService.setStateTicket(token);
         }
+        return ticket;
     }
 
     static async get_js_ticket () {
-        let ticket = WxService.get_tickect();
-        if(!ticket){
-            let data = await WxService.get_token();
-            if(data.access_token){
-                let url = TICKET_URL + '?access_token=' + data.access_token + '&type=jsapi';
-                let data = await axios.get(url)
-                            .then(res => {
-                                if(res.data.errcode === 0){
-                                    return res.data.ticket; 
-                                } else {
-                                    return null;
-                                }
-                            });
-            } else {
-                return null;
-            }
-        } else {
-            return ticket;
-        }
+        let token = await WxService.get_token();
+        return await WxService.get_tickect(token);
     }
 
     // 微信授权JS SDK
