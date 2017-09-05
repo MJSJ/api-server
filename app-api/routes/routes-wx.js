@@ -14,4 +14,6 @@ router.get('/auth/MP_verify_oai1jPbiuXyaD710.txt', async function (ctx) {
 
 router.get('/wx/auth/activity', wxSerice.authWxLogin);
 
+router.get('/wx/jssdk', wxSerice.getJsSdkConf);
+
 module.exports = router.middleware();

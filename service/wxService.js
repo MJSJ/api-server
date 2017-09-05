@@ -8,11 +8,13 @@ const TOKEN_URL = 'https://api.weixin.qq.com/sns/oauth2/access_token';
 const USER_URL = 'https://api.weixin.qq.com/sns/userinfo';
 const GRANT_TYPE = 'authorization_code';
 const AUTH_URL = 'https://api.weixin.qq.com/sns/userinfo';
+const TICKET_URL = 'https://api.weixin.qq.com/cgi-bin/ticket/getticket'
 const EXPIRES = 2;
 
 const axios = require('axios');
 const model = require('../models');
 const fs = require('fs');
+const sha1 = require('sha1');
 
 class WxService {
     static async get_access_token (c) {
@@ -48,6 +50,58 @@ class WxService {
                 });
     }
 
+    static get_tickect () {
+        if(this.state.hasOwnProperty('ticket')){
+            let created_at = this.state.ticket.created_at;
+            let now = Date.parse(new Date())/1000;
+            if(now - created_at > 7000){
+                delete this.state.ticket;
+            } else {
+                return this.state.ticket.value;
+            }
+        }
+        return null;
+    }
+
+    static async get_js_ticket () {
+        let ticket = WxService.get_tickect();
+        if(!ticket){
+            let data = await WxService.get_access_token(code);
+            if(data.access_token){
+                let url = TICKET_URL + '?access_token=' + data.access_token + '&type=jsapi';
+                let data = await axios.get(url)
+                            .then(res => {
+                                if(res.data.errcode === 0){
+                                    return res.data.ticket; 
+                                } else {
+                                    return null;
+                                }
+                            });
+            } else {
+                return null;
+            }
+        } else {
+            return ticket;
+        }
+    }
+
+    // 微信授权JS SDK
+    static async getJsSdkConf (ctx) {
+        let ticket = await WxService.get_js_ticket();
+        let noncestr = Math.random().toString(36).substr(2);
+        let timestamp = Date.parse(new Date())/1000;
+        let url = ctx.url;
+        let string1 = 'jsapi_ticket=' + ticket + '&noncestr=' + noncestr + '&timestamp=' + timestamp + '&url=' + url;
+        ctx.body = {
+            appId: APPID,
+            timestamp: timestamp,
+            nonceStr: noncestr,
+            signature: sha1(string1),
+            jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQQ','onMenuShareWeibo','onMenuShareQZone']
+        };
+    }
+
+    // 微信授权登录
     static async authWxLogin(ctx) {
         let c = ctx.cookies.get('c');
         let path = ctx.query.state;
