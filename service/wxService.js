@@ -18,6 +18,8 @@ const fs = require('fs');
 const sha1 = require('sha1');
 
 class WxService {
+
+    // 获取基础的access_token
     static async get_base_token () {
         let url = BASE_TOKEN_URL + '&appid=' + APPID + '&secret=' + SECRET;
         return axios.get(url)
@@ -31,6 +33,7 @@ class WxService {
                 });
     }
 
+    // 获取授权登陆的access_token
     static async get_access_token (c) {
         let url = TOKEN_URL + '?' 
                     + 'appid=' + APPID 
@@ -48,6 +51,7 @@ class WxService {
                 });
     }
 
+    // 获取JS-SDK的ticket
     static async get_base_ticket (access_token) {
         let url = TICKET_URL + '?access_token=' + access_token + '&type=jsapi';
         return axios.get(url)
