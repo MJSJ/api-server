@@ -91,8 +91,8 @@ class WxService {
         return token.access_token;
     }
 
-    static async setStateTicket () {
-        let ticket = await WxService.get_base_ticket();
+    static async setStateTicket (token) {
+        let ticket = await WxService.get_base_ticket(token);
         if(ticket){
             this.ticket = {
                 value: ticket,
@@ -138,7 +138,6 @@ class WxService {
 
     static async get_js_ticket () {
         let token = await WxService.get_token();
-        console.log(token);
         return await WxService.get_tickect(token);
     }
 
