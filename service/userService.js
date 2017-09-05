@@ -54,7 +54,7 @@ class UserService {
         const userID = ctx.request.body.userID;
         if((!userID&&!username)||!password){
             ctx.body = {
-                code:"200",
+                code:"204",
                 data:{
                     success:false,
                     msg:"arg not valid"
