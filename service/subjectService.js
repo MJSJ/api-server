@@ -138,11 +138,16 @@ class SubjectService {
                 sResult = {
                     name:result.name,
                     id:result.id,
-                    owner:{
-                        name:result.user.name,
-                        id:result.user.id
-                    },
+                    
                     history:[]
+                }
+                if(result.user){
+                    sResult.owner={
+                        name:result.user&&result.user.name,
+                        id:result.user&&rresult.user.id
+                    }
+                }else{
+                    sResult.owner = null
                 }
                 if(result.histories&&result.histories.length>0){
                     sResult.history = await SubjectService.getHTML(result.histories, subjectID);
