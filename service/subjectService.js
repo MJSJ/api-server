@@ -359,7 +359,7 @@ class SubjectService {
             // 修改
             let result;
             if(id)
-                result = SubjectDAO.updateCompany(id,subjectList);
+                result = SubjectDAO.updateCompany(id,name,password,subjectList);
             else
                 result = SubjectDAO.addCompany(name,password,subjectList)
 

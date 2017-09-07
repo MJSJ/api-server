@@ -4,6 +4,7 @@
 const Lib        = require('../lib/lib.js');
 const ModelError = require('../models/modelerror.js');
 const model  = require('../models/index.js');
+var Promise = require("bluebird");
 const sequelize = model.sequelize;
 
 class SubjectDAO {
@@ -229,24 +230,37 @@ class SubjectDAO {
 
     //其实是更新专题的owner
     //找不到合适的名字了
-    static async updateCompany(id,subjectList){
-        // filtedList = subjectList.filter((subject)=>{
-        //     return 
-        // })
+    static async updateCompany(id,name,password,subjectList){
         try {
-            subjectList.map(async (subjectID)=>{
-                try{
-                    await model.subject.update({
-                        userId:id
-                    },{where: {
-                        id: subjectID
-                    }})
-                }catch(e){
-                    console.error(e)
-                    Lib.logException('model.subject.map upadate', e);
-                    throw(e)
-                }
-                
+            return sequelize.transaction(function (t) {
+                return model.user.update({
+                    name:name,
+                    password:password,
+                   
+                }, {where:{
+                    id:id
+                }},{transaction: t}).then(function (user) {
+                    subjectList.map(async (subjectID)=>{
+                        try{
+                            await model.subject.update({
+                                userId:id
+                            },{where: {
+                                id: subjectID
+                            }})
+                        }catch(e){
+                            console.error(e)
+                            Lib.logException('model.subject.map upadate', e);
+                            throw(e)
+                        }
+                    })
+                    return true
+                });
+            }).then(function (result) {
+                return true
+            }).catch((e)=>{
+                console.error(e)
+                Lib.logException('model.subject.addCompany', e);
+                return false
             })
             return true
         } catch (e) {
