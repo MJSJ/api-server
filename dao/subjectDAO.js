@@ -5,7 +5,7 @@ const Lib        = require('../lib/lib.js');
 const ModelError = require('../models/modelerror.js');
 const model  = require('../models/index.js');
 // var Promise = require("bluebird");
-var _ = require('lodash/core');
+var _ = require('lodash');
 const sequelize = model.sequelize;
 
 class SubjectDAO {
@@ -259,13 +259,26 @@ class SubjectDAO {
 
 
                     const allSubjectList = await model.subject.findAll({
-                        attributes: { exclude: ['userId'] },
+                        attributes: { include: ['id'] },
                         where: {
-                            userId: id
+                            $or: [
+                                {
+                                    userId: null
+                                },
+                                {
+                                    userId:id
+                                }
+                            ]
                         }
                     })
-                    let removeList = _.pull(allSubjectList, subjectList)
-                    removeList.map(async ()=>{
+                    let allSubjectListID =[]
+                    allSubjectList.map((item)=>{
+                        allSubjectListID.push(item.id)
+                    })
+
+                    //需要删除的list
+                    let removeList = _.pullAll(allSubjectListID, subjectList)
+                    removeList.map(async (subjectID)=>{
                         try{
                             await model.subject.update({
                                 userId:null
