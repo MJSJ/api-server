@@ -4,7 +4,8 @@
 const Lib        = require('../lib/lib.js');
 const ModelError = require('../models/modelerror.js');
 const model  = require('../models/index.js');
-var Promise = require("bluebird");
+// var Promise = require("bluebird");
+var _ = require('lodash/core');
 const sequelize = model.sequelize;
 
 class SubjectDAO {
@@ -239,11 +240,35 @@ class SubjectDAO {
                    
                 }, {where:{
                     id:id
-                }},{transaction: t}).then(function (user) {
+                }},{transaction: t}).then(async function (user) {
+
+                    //把传入的专题添加owner
                     subjectList.map(async (subjectID)=>{
                         try{
                             await model.subject.update({
                                 userId:id
+                            },{where: {
+                                id: subjectID
+                            }})
+                        }catch(e){
+                            console.error(e)
+                            Lib.logException('model.subject.map upadate', e);
+                            throw(e)
+                        }
+                    })
+
+
+                    const allSubjectList = await model.subject.findAll({
+                        attributes: { exclude: ['userId'] },
+                        where: {
+                            userId: id
+                        }
+                    })
+                    let removeList = _.pull(allSubjectList, subjectList)
+                    removeList.map(async ()=>{
+                        try{
+                            await model.subject.update({
+                                userId:null
                             },{where: {
                                 id: subjectID
                             }})
