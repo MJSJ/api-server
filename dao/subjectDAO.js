@@ -176,7 +176,10 @@ class SubjectDAO {
                             model:model.user,
                             attributes:['name']
                         }]
-                    }]
+                    }],
+                    order: [
+                        ['createdAt', 'DESC'],
+                    ]
                 })
             }else{
                 subject = await model.subject.findOne({
@@ -194,7 +197,10 @@ class SubjectDAO {
                             model:model.user,
                             attributes:['name']
                         }]
-                    }]
+                    }],
+                    order: [
+                        ['createdAt', 'DESC'],
+                    ]
                 })
             }
             return subject;
