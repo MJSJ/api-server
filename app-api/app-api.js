@@ -111,7 +111,11 @@ app.use(async function mysqlConnection(ctx, next) {
 // logging
 const access = { type: 'rotating-file', path: './logs/api-access.log', level: 'trace', period: '1d', count: 4 };
 const error  = { type: 'rotating-file', path: './logs/api-error.log',  level: 'error', period: '1d', count: 4 };
-const logger = bunyan.createLogger({ name: 'api', streams: [ access, error ] });
+const warn  = { type: 'rotating-file', path: './logs/api-warn.log',  level: 'warn', period: '1d', count: 4 };
+const info  = { type: 'rotating-file', path: './logs/api-info.log',  level: 'info', period: '1d', count: 4 };
+const debug  = { type: 'rotating-file', path: './logs/api-debug.log',  level: 'debug', period: '1d', count: 4 };
+const trace  = { type: 'rotating-file', path: './logs/api-trace.log',  level: 'trace', period: '1d', count: 4 };
+const logger = bunyan.createLogger({ name: 'api', streams: [ access, error,warn,debug,trace, info] });
 app.use(koaLogger(logger, {}));
 
 

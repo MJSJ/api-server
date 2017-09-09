@@ -144,7 +144,7 @@ class SubjectService {
                 if(result.user){
                     sResult.owner={
                         name:result.user&&result.user.name,
-                        id:result.user&&rresult.user.id
+                        id:result.user&&result.user.id
                     }
                 }else{
                     sResult.owner = null
