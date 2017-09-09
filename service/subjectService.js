@@ -78,8 +78,11 @@ class SubjectService {
                 if(resultID) await SubjectService.saveHTML(content, resultID, 0);
             }else{
                 let url = await SubjectService.saveHTML(content, subjectID, 1);
-                //更改专题 ==》添加历史
-                resultID = await SubjectDAO.addHistory(url,tag,loginUser.id,subjectID)
+                //更改专题 ==》1.设置当前主版本历史的content 2.添加历史作为主版本号
+                let changeHistory = await SubjectDAO.editHistory(url, subjectID);
+                if(changeHistory){
+                    resultID = await SubjectDAO.addHistory(null,tag,loginUser.id,subjectID);
+                }
             }
 
             if(!resultID)

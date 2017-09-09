@@ -131,6 +131,31 @@ class SubjectDAO {
         }
     }
 
+    static async editHistory(content,subjectID){
+        try{
+            return sequelize.transaction(function (t) {
+                return model.history.update({
+                    content: content
+                }, {where:{
+                    subjectID: subjectID,
+                    content: null
+                }},{transaction: t}).then(async function (history) {
+                    return true;
+                });
+            }).then(function (result) {
+                return true
+            }).catch((e)=>{
+                console.error(e)
+                Lib.logException('model.history.editHistory', e);
+                return false
+            });
+        }catch(e){
+            console.error(e)
+            Lib.logException('model.history.editHistory', e);
+            throw(e)
+        }
+    }
+
     static async getSubject(subjectID,userID){
         let subject;
         try{
