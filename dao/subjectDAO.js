@@ -178,7 +178,7 @@ class SubjectDAO {
                         }]
                     }],
                     order: [
-                        ['createdAt', 'DESC'],
+                        [model.history,'createdAt', 'DESC']
                     ]
                 })
             }else{
@@ -199,7 +199,7 @@ class SubjectDAO {
                         }]
                     }],
                     order: [
-                        ['createdAt', 'DESC'],
+                        [model.history,'createdAt', 'DESC']
                     ]
                 })
             }
