@@ -4,6 +4,7 @@
     "password": "fly",
     "database": "api_server",
     "host": "127.0.0.1",
+    "timezone": "+08:00",  
     "dialect": "mysql",
     "dialectOptions": {
       "charset": "utf8",
@@ -13,6 +14,7 @@
   "test": {
     "username": "fly",
     "password": null,
+    "timezone": "+08:00",  
     "database": "database_test",
     "host": "127.0.0.1",
     "dialect": "mysql",
@@ -24,6 +26,7 @@
   "production": {
     "username": "root",
     "password": "fly",
+    "timezone": "+08:00",  
     "database": "api_server",
     "host": "127.0.0.1",
     "dialect": "mysql",
