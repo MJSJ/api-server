@@ -4,7 +4,9 @@ const IO = require( 'koa-socket' )
 var allowedOrigins = "localhost:8080";
 const io = new IO({
     namespace: 'ws',
-    origins:allowedOrigins
+    ioOptions:{
+        origins:allowedOrigins
+    }
 })
 
 io.on('message', ctx => {
