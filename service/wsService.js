@@ -1,8 +1,10 @@
 'use strict';
 
 const IO = require( 'koa-socket' )
+var allowedOrigins = "localhost:8080";
 const io = new IO({
-    namespace: 'ws'
+    namespace: 'ws',
+    origins:allowedOrigins
 })
 
 io.on('message', ctx => {
