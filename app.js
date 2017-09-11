@@ -12,6 +12,9 @@ const debug    = require('debug')('app');   // small debugging utility
 // require('dotenv').config(); // loads environment variables from .env file (if available - eg dev env)
 
 
+
+
+
 const env       = "production";
 const path      = require("path");
 const session = require('koa-generic-session');
@@ -19,6 +22,11 @@ const MysqlStore = require('koa-mysql-session')
 const config    = require(path.join(__dirname, '.', 'config', 'config.json'))[env];
 
 const app = new Koa();
+
+//websocket
+const io = require("./service/wsService.js")
+io.attach(app)
+
 /* set up middleware which will be applied to each request - - - - - - - - - - - - - - - - - - -  */
 
 // CSRF 有bug
@@ -96,6 +104,7 @@ app.use(async function composeSubapp(ctx) { // note no 'next' after composed sub
 
 
 
+
 /* create server - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
 
 
@@ -105,4 +114,4 @@ app.listen(process.env.PORT||8081);
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
 
-module.exports = app;
+module.exports  = app;
