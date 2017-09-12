@@ -1,7 +1,7 @@
 'use strict';
 
 const IO = require( 'koa-socket' )
-var allowedOrigins = "http://localhost:* http://127.0.0.1:*";
+var allowedOrigins = "localhost:*";
 const io = new IO({
     namespace: 'ws',
     ioOptions:{
