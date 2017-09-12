@@ -9,9 +9,15 @@ const io = new IO({
     }
 })
 
-io.on('message', ctx => {
-    console.log( ctx.data )
-    io.broadcast( 'response', "msg from server" )
+io.on('connection', sock => {
+    io.on('disconnect', function () {
+        console.log("connected")
+    });
+    
+    io.on('message', ctx => {
+        console.log( ctx.data )
+        io.broadcast( 'response', "you just said"+ctx.data )
+    })
 })
 
 
