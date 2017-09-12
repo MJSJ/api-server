@@ -11,6 +11,16 @@ const io = new IO({
     }
 })
 
+// io.on( 'connection', sock => {
+//     // ...
+//     console.log("connected")
+//     io.broadcast('response', "connected" )
+// })
+
+// io.on('disconnect', sock => {
+//     console.log("connected")
+// })
+  
 io.on('message', ctx => {
     console.log( ctx.data )
     io.broadcast( 'response', "msg from server" )
