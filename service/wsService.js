@@ -2,12 +2,10 @@
 
 const IO = require( 'koa-socket' )
 var allowedOrigins = "http://localhost:* http://127.0.0.1:*";
-var path ='/ws';
 const io = new IO({
     namespace: 'ws',
     ioOptions:{
-        origins:allowedOrigins,
-        path:path
+        origins:allowedOrigins
     }
 })
 
