@@ -244,7 +244,7 @@ class SubjectDAO {
                     password:password,
                     role:1
                 }, {transaction: t}).then(function (user) {
-                    SubjectDAO.updateCompany(user.id,subjectList)
+                    SubjectDAO.updateCompany(user.id,name,password,subjectList)
                 });
             }).then(function (result) {
                 return true
