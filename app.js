@@ -8,7 +8,7 @@ const compose  = require('koa-compose');    // middleware composer
 const compress = require('koa-compress');   // HTTP compression
 const mysql    = require('mysql2/promise'); // fast mysql driver
 const debug    = require('debug')('app');   // small debugging utility
-// const csrf     = require('koa-csrf')
+const csrf     = require('koa-csrf')
 // require('dotenv').config(); // loads environment variables from .env file (if available - eg dev env)
 
 
@@ -29,16 +29,6 @@ io.attach(app)
 
 /* set up middleware which will be applied to each request - - - - - - - - - - - - - - - - - - -  */
 
-// CSRF 有bug
-
-// app.use(new csrf({
-//   invalidSessionSecretMessage: 'Invalid session secret',
-//   invalidSessionSecretStatusCode: 403,
-//   invalidTokenMessage: 'Invalid CSRF token',
-//   invalidTokenStatusCode: 403,
-//   excludedMethods: [ 'GET', 'HEAD', 'OPTIONS' ],
-//   disableQuery: false
-// }))
 
 // return response time in X-Response-Time header
 app.use(async function responseTime(ctx, next) {
@@ -75,7 +65,7 @@ app.use(session({
         database: config.database,
         host: config.host
     }),
-    key:APP_NAME+'.sid',
+    key:APP_NAME,
     rolling: true,
     cookie: {
         maxage:THIRTY_MINTUES
@@ -87,6 +77,17 @@ app.use(async function(ctx, next) {
     debug(ctx.method + ' ' + ctx.url);
     await next();
 });
+
+
+//都TMD禁了，唯一作用生成csrf token
+app.use(new csrf({
+    invalidSessionSecretMessage: 'Invalid session secret',
+    invalidSessionSecretStatusCode: 403,
+    invalidTokenMessage: 'Invalid CSRF token',
+    invalidTokenStatusCode: 403,
+    excludedMethods: [ 'GET', 'HEAD', 'OPTIONS','POST'],
+    disableQuery: false
+}))
 
 
 app.use(async function composeSubapp(ctx) { // note no 'next' after composed subapp
@@ -101,6 +102,8 @@ app.use(async function composeSubapp(ctx) { // note no 'next' after composed sub
     // }
     await compose(require('./app-api/app-api.js').middleware)(ctx);
 });
+
+
 
 
 

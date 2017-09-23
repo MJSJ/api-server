@@ -1,7 +1,21 @@
+/**
+ * 
+ * 此类无用
+ */
+
 class CsrfService {
     static async setToken (ctx) {
-        ctx.session.csrf = ctx.query.csrf || '';
-        ctx.body = 'Yeah!';
+    
+        const ssid = ctx.query.mjsj;
+        console.log(sid)
+        const csrf = ctx.query.token;
+       
+        ctx.session.csrf = csrf || '';
+        ctx.body = {
+            success: true,
+            code:"200"
+        }
+
     }
 
     static async test (ctx) {

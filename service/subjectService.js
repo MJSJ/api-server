@@ -5,6 +5,7 @@ const SubjectDAO = require('../dao/subjectDAO.js');
 const Lib        = require('../lib/lib.js');
 const loginInterceptor  = require("../lib/loginInterceptor").loginInterceptor;
 const adminInterceptor  = require("../lib/loginInterceptor").adminInterceptor;
+const csrfInterceptor   = require("../lib/loginInterceptor").csrfInterceptor;
 const path = require("path");
 const fs = require("fs");
 const STATIC_PATH = path.join(__dirname, '../s');
@@ -63,6 +64,8 @@ class SubjectService {
     }
 
     static async updateSubject(ctx){
+        //验证csrf
+        if(csrfInterceptor(ctx)) return
         if(loginInterceptor(ctx)) return 
         const loginUser =  ctx.session.loginUser
         const {subjectID,content,tag,subjectName} = ctx.request.body

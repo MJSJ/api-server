@@ -43,7 +43,8 @@ class UserService {
                         id: ctx.session.loginUser.id,
                         name: ctx.session.loginUser.name,
                         role: ctx.session.loginUser.role
-                    }
+                    },
+                    _csrf:ctx.session.secret
                 }
             }
             return;
@@ -108,7 +109,8 @@ class UserService {
                         id: user.id,
                         name: user.name,
                         role: user.role
-                    }
+                    },
+                    _csrf:ctx.session.secret
                 }
             }
         } else {
